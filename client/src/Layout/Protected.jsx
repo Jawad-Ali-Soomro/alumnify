@@ -1,6 +1,6 @@
 import React from "react";
 import AppSidebar from "./AppSidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 const Protected = ({ children }) => {
   const token = window.localStorage.getItem("token");
@@ -10,8 +10,7 @@ const Protected = ({ children }) => {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="p-2">
-        <SidebarTrigger className={"cursor-pointer"} />
+      <main className="p-2 w-[100%] overflow-scroll bg-gray-200">
         {children}
       </main>
     </SidebarProvider>

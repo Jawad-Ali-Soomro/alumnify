@@ -1,14 +1,5 @@
-import {
-  Sidebar,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar";
 import { Calendar } from "lucide-react";
 import { Network } from "lucide-react";
-import { LayoutDashboard } from "lucide-react";
 import { Newspaper } from "lucide-react";
 import { User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -18,33 +9,32 @@ import { CalendarCheck } from "lucide-react";
 import { List } from "lucide-react";
 import { Bug } from "lucide-react";
 import { GiConfirmed } from "react-icons/gi";
-import { Settings } from "lucide-react";
 import { LogOut } from "lucide-react";
-
+import { Settings } from "lucide-react";
+import { Home } from "lucide-react";
 const AppSidebar = () => {
+  const userType = window.localStorage.getItem("role");
   const navigate = useNavigate();
   const activeTab = window.location.pathname;
-  const userType = window.localStorage.getItem("role");
   const NavigationTabs = {
     user: [
-      { label: "Welcome Back!", path: "/", icon: LayoutDashboard },
-      { label: "Ongoing Events", path: "/events", icon: Calendar },
-      { label: "Explore Jobs", path: "/jobs", icon: Newspaper },
-      { label: "Alumnae Network", path: "/network", icon: Network },
-      { label: "Manage Profile", path: "/profile", icon: User },
+      { path: "/", icon: Home },
+      { path: "/events", icon: Calendar },
+      { path: "/jobs", icon: Newspaper },
+      { path: "/network", icon: Network },
+      { path: "/profile", icon: User },
     ],
 
     admin: [
-      { label: "Welcome Admin!", path: "/", icon: LayoutDashboard },
-      { label: "Manage Users", path: "/admin/users", icon: Users },
-      { label: "Approve Events", path: "/admin/events", icon: CalendarCheck },
-      { label: "Listing of Jobs", path: "/admin/jobs", icon: List },
+      { path: "/", icon: Home },
+      { path: "/admin/users", icon: Users },
+      { path: "/admin/events", icon: CalendarCheck },
+      { path: "/admin/jobs", icon: List },
       {
-        label: "Verify Alumni",
         path: "/admin/verify-alumni",
         icon: GiConfirmed,
       },
-      { label: "Report Problem", path: "/admin/reports", icon: Bug },
+      { path: "/admin/reports", icon: Bug },
     ],
   };
 
@@ -57,41 +47,29 @@ const AppSidebar = () => {
   };
 
   const tabs = getNavigationTabs();
-  console.log(tabs);
 
   return (
-    <Sidebar className={"p-2"}>
-      <SidebarHeader className={"flex justify-center items-center mt-2"}>
-        <img src="/alumnify-logo.png" className={"w-30"} alt="" />
-      </SidebarHeader>
-      <SidebarMenu className={"mt-5"}>
-        {tabs?.map((tab, index) => {
-          return (
-            <SidebarMenuItem key={index}>
-              <SidebarMenuButton
-                onClick={() => navigate(tab.path)}
-                className={`cursor-pointer h-11 hover:bg-gray-200 hover:text-gray-700 pl-3 text-sm text-gray-500 ${
-                  activeTab === tab.path
-                    ? "bg-gradient-to-r from-[#086498] via-[#0a7bb3] to-[#0c90ca] text-white hover:from-[#086498] hover:via-[#0a7bb3] hover:to-[#0a7bb3] hover:text-white"
-                    : "text-gray-500"
-                }`}
-              >
-                <tab.icon />
-                <p className="mt-[2px]">{tab.label}</p>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          );
-        })}
-      </SidebarMenu>
-      <SidebarFooter className={"absolute bottom-0 right-[-70px]"}>
-        <SidebarMenuButton className={"w-[50px] h-[50px] flex justify-center text-black border border-gray-200 hover:bg-gray-100 hover:text-black cursor-pointer bg-gray-100"}>
-          <Settings />
-        </SidebarMenuButton>
-        <SidebarMenuButton className={"w-[50px] h-[50px] flex justify-center text-black border border-gray-200 hover:bg-gray-100 hover:text-black cursor-pointer bg-gray-100"}>
-          <LogOut />
-        </SidebarMenuButton>
-      </SidebarFooter>
-    </Sidebar>
+    <div className="px-2 flex flex-col justify-start sticky align-center pt-2 gap-2">
+      {tabs.map((tab, index) => (
+        <div
+          key={index}
+          onClick={() => navigate(tab.path)}
+          className={`w-[50px] h-[48px] flex rounded-lg justify-center items-center cursor-pointer  ${
+            activeTab === tab.path
+              ? "text-white bg-[#086498] hover:bg-[#086490]"
+              : "text-gray-500 hover:bg-gray-200 hover:text-gray-900"
+          }`}
+        >
+          <tab.icon className="w-5 h-5" />
+        </div>
+      ))}
+      <div className="flex w-[50px] absolute bottom-16 h-[48px] rounded-lg justify-center items-center cursor-pointer bg-gray-200 text-black">
+        <Settings size={18} />
+      </div>
+      <div className="flex w-[50px] absolute bottom-2 h-[48px] rounded-lg justify-center items-center cursor-pointer bg-red-500 text-white">
+        <LogOut size={18} />
+      </div>
+    </div>
   );
 };
 
