@@ -1,4 +1,7 @@
 * {
-  margin: 0;
-  padding: 0;
+  font-family: exo;
+}
+
+body {
+  background: linear-gradient(45deg, #f3f4f68f, white);
 }
