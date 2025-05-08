@@ -8,6 +8,7 @@ import { CalendarIcon } from "lucide-react";
 import { MoreVertical } from "lucide-react";
 import { Link } from "lucide-react";
 import { RiAddBoxLine, RiUserAddLine } from "react-icons/ri";
+import { Info } from "lucide-react";
 
 const UserDashboard = () => {
   const [posts, setPosts] = useState([]);
@@ -41,10 +42,10 @@ const UserDashboard = () => {
 
   return (
     <div className="flex justify-center w-full overflow-y-auto">
-      <div className="flex justify-center items-center flex-col py-4 mr-100">
+      <div className="flex justify-center items-center flex-col py-4">
         {posts?.map((post) => (
           <div
-            className="flex flex-col rounded-lg border border-gray-300 p-4 mb-4 w-full max-w-[600px] mx-auto"
+            className="flex flex-col rounded-lg border border-gray-300 p-4 mb-4 w-full max-w-[800px] mx-auto"
             key={post?._id}
           >
             <div className="flex items-center justify-between w-full rounded-lg px-2 py-2 rounded-lg px-2 mb-3">
@@ -104,7 +105,7 @@ const UserDashboard = () => {
                 >
                   {post?.content}
                 </p>
-                {post?.content?.length > 100 && (
+                {post?.content?.length > 200 && (
                   <button
                     onClick={() => toggleExpand(post._id)}
                     className="text-blue-500 uppercase transition cursor-pointer hover:text-blue-700 mb-3 text-sm flex items-center justify-end w-full"
@@ -123,7 +124,9 @@ const UserDashboard = () => {
               </div>
 
               {post?.media?.length > 0 && (
-                <div className="mb-3 rounded-md overflow-hidden">
+                <div className={`mb-3 rounded-md overflow-hidden ${
+                  post.content?.length > 200 ? "" : "mt-5"
+                }`}>
                   <img
                     src={post.media[0].image}
                     alt="Post media"
@@ -160,7 +163,12 @@ const UserDashboard = () => {
           </div>
         ))}
       </div>
-      <div className="w-[500px] h-[600px] bg-white fixed right-10 top-5 rounded-lg border"></div>
+      {/* <div className="w-[500px] h-[600px] bg-white flex flex-col fixed right-10 top-5 rounded-lg border">
+        <div className="flex justify-between p-6 bg-gray-100">
+          <p>Add Friends To Your Feed!</p>
+          <Info />
+        </div>
+      </div> */}
     </div>
   );
 };
