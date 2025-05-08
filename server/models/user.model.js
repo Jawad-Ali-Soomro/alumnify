@@ -30,6 +30,10 @@ const UserSchema = new Schema({
     enum: ['admin', 'user'], 
     default: 'user' 
   },
+  bio: {
+    type: String,
+    default: ""
+  },
   account_status: { 
     type: String, 
     enum: ['active', 'suspended', 'deactivated'], 
