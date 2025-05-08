@@ -12,6 +12,7 @@ import { GiConfirmed } from "react-icons/gi";
 import { LogOut } from "lucide-react";
 import { Settings } from "lucide-react";
 import { Home } from "lucide-react";
+import { Plus } from "lucide-react";
 const AppSidebar = () => {
   const userType = window.localStorage.getItem("role");
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const AppSidebar = () => {
       { path: "/jobs", icon: Newspaper },
       { path: "/network", icon: Network },
       { path: "/profile", icon: User },
+      { path: "/add/post", icon: Plus },
     ],
 
     admin: [
@@ -49,7 +51,7 @@ const AppSidebar = () => {
   const tabs = getNavigationTabs();
 
   return (
-    <div className="px-2 flex flex-col justify-start sticky align-center pt-2 gap-2">
+    <div className="px-2 flex flex-col justify-start fixed h-[100vh] border align-center pt-2 gap-2">
       {tabs.map((tab, index) => (
         <div
           key={index}

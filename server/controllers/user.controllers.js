@@ -26,6 +26,7 @@ const newUser = async (req, res) => {
 
   return res.status(201).json({
     success: true,
+    user: newUser,
     message: "User created successfully",
     role: newUser.role,
     token
@@ -58,6 +59,7 @@ const loginUser = async (req, res) => {
 
   return res.status(200).json({
     success: true,
+    user:user,
     message: "User logged in successfully",
     role: user.role,
     token

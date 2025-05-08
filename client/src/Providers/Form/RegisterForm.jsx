@@ -18,34 +18,35 @@ const RegisterForm = () => {
   } = useFormContext();
 
   const onSubmit = async (data) => {
-   try {
-    const api = await axios.post(`http://localhost:8080/api/user` , {
-      username: data.username,
-      email: data.email,
-      password: data.password
-    });
-    window.localStorage.setItem("token", api.data.token);
-    window.localStorage.setItem("role", api.data.role);
-    window.location.href = "/";
-   } catch (error) {
-    return toast(error.response.data.message, {
-      action: {
-        label: "RESET",
-        onClick: () => {
-          setValue("username", "");
-          setValue("email", "");
-          setValue("password", "");
-          setValue("confirmPassword", "");
+    try {
+      const api = await axios.post(`http://localhost:8080/api/user`, {
+        username: data.username,
+        email: data.email,
+        password: data.password,
+      });
+      window.localStorage.setItem("token", api.data.token);
+      window.localStorage.setItem("role", api.data.role);
+      window.localStorage.setItem("user", JSON.stringify(api.data.user));
+      window.location.href = "/";
+    } catch (error) {
+      return toast(error.response.data.message, {
+        action: {
+          label: "RESET",
+          onClick: () => {
+            setValue("username", "");
+            setValue("email", "");
+            setValue("password", "");
+            setValue("confirmPassword", "");
+          },
         },
-      },
-      duration: 5000,
-      icon: <RiErrorWarningLine />,
-      style: {
-        backgroundColor: "#f44336",
-        color: "#fff",
-      },
-    });
-   }
+        duration: 5000,
+        icon: <RiErrorWarningLine />,
+        style: {
+          backgroundColor: "#f44336",
+          color: "#fff",
+        },
+      });
+    }
   };
 
   return (

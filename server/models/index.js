@@ -6,6 +6,7 @@ const Group = require('./group.model');
 const GroupMembership = require('./groupMembership.model');
 const Event = require('./event.model');
 const EventRegistration = require('./eventRegistration.model');
+const Post = require('./post.model');
 
 module.exports = {
   User,
@@ -15,5 +16,6 @@ module.exports = {
   Group,
   GroupMembership,
   Event,
-  EventRegistration
+  EventRegistration,
+  Post
 };

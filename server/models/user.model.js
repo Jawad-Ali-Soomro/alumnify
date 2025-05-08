@@ -20,6 +20,10 @@ const UserSchema = new Schema({
     select: false
   },
   username: { type: String, required: true, trim: true },
+  avatar: {
+    type: String,
+    default: ""
+  },
   role: { 
     type: String, 
     required: true, 

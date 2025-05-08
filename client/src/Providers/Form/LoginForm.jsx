@@ -24,7 +24,9 @@ const LoginForm = () => {
       });
       window.localStorage.setItem("token", api.data.token);
       window.localStorage.setItem("role", api.data.role);
+      window.localStorage.setItem("user", JSON.stringify(api.data.user));
       window.location.href = "/"; 
+      console.log(api.data);
     } catch (error) {
       return toast(error?.response?.data?.message, {
         action: {

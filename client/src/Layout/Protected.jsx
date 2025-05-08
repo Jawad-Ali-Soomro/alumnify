@@ -10,7 +10,7 @@ const Protected = ({ children }) => {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="p-2 w-[100%] overflow-scroll bg-gray-200">
+      <main className="p-2 w-[100%] overflow-scroll">
         {children}
       </main>
     </SidebarProvider>
