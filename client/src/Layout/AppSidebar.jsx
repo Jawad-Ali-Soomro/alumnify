@@ -40,11 +40,10 @@ const AppSidebar = () => {
       { label: "Approve Events", path: "/admin/events", icon: CalendarCheck },
       { label: "Listing of Jobs", path: "/admin/jobs", icon: List },
       {
-        label: "Verify An Alumni",
+        label: "Verify Alumni",
         path: "/admin/verify-alumni",
         icon: GiConfirmed,
       },
-      { label: "Admin Settings", path: "/admin/settings", icon: Settings },
       { label: "Report Problem", path: "/admin/reports", icon: Bug },
     ],
   };
@@ -84,6 +83,14 @@ const AppSidebar = () => {
           );
         })}
       </SidebarMenu>
+      <SidebarFooter className={"absolute bottom-0 right-[-70px]"}>
+        <SidebarMenuButton className={"w-[50px] h-[50px] flex justify-center text-black border border-gray-200 hover:bg-gray-100 hover:text-black cursor-pointer bg-gray-100"}>
+          <Settings />
+        </SidebarMenuButton>
+        <SidebarMenuButton className={"w-[50px] h-[50px] flex justify-center text-black border border-gray-200 hover:bg-gray-100 hover:text-black cursor-pointer bg-gray-100"}>
+          <LogOut />
+        </SidebarMenuButton>
+      </SidebarFooter>
     </Sidebar>
   );
 };
