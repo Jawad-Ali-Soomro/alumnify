@@ -3,18 +3,46 @@ import { useFormContext } from "react-hook-form";
 import { Input } from "../../components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
-import { RiGithubLine } from "react-icons/ri";
+import { RiErrorWarningLine, RiGithubLine } from "react-icons/ri";
 import { FaXTwitter } from "react-icons/fa6";
+import axios from "axios";
+import { toast } from "sonner";
 
 const LoginForm = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useFormContext();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      const api = await axios.post(`http://localhost:8080/api/user/login`, {
+        email: data.email,
+        password: data.password,
+      });
+      window.localStorage.setItem("token", api.data.token);
+      window.localStorage.setItem("role", api.data.role);
+      window.location.href = "/"; 
+    } catch (error) {
+      return toast(error?.response?.data?.message, {
+        action: {
+          label: "RESET",
+          onClick: () => {
+            setValue("email", "");
+            setValue("password", "");
+          },
+        },
+        duration: 5000,
+        icon: <RiErrorWarningLine />,
+        style: {
+          backgroundColor: "#f44336",
+          color: "#fff",
+        },
+      });
+    
+    }
   };
 
   return (

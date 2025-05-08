@@ -1,3 +1,3 @@
-const { newUser } = require("./user.controllers");
+const { newUser, loginUser } = require("./user.controllers");
 
-module.exports = {newUser}
+module.exports = {newUser, loginUser}

@@ -66,7 +66,7 @@ const AppSidebar = () => {
       <div className="flex w-[50px] absolute bottom-16 h-[48px] rounded-lg justify-center items-center cursor-pointer bg-gray-200 text-black">
         <Settings size={18} />
       </div>
-      <div className="flex w-[50px] absolute bottom-2 h-[48px] rounded-lg justify-center items-center cursor-pointer bg-red-500 text-white">
+      <div onClick={() => window.localStorage.clear() + navigate('/') + window.location.reload()} className="flex w-[50px] absolute bottom-2 h-[48px] rounded-lg justify-center items-center cursor-pointer bg-red-500 text-white">
         <LogOut size={18} />
       </div>
     </div>
