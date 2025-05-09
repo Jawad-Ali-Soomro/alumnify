@@ -3,7 +3,7 @@ import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Login, Register } from "./Providers";
 import { Dashboard, Protected } from "./Layout";
-import PostDetails from "./Layout/Dashboards/PostDetails";
+import AddPost from "./Layout/Dashboards/AddPost";
 function App() {
   const token = window.localStorage.getItem("token");
 
@@ -29,10 +29,10 @@ function App() {
       ),
     },
     {
-      path: "/post/:postUrl",
+      path: "/add/post",
       element: token ? (
         <Protected>
-          <PostDetails />
+          <AddPost />
         </Protected>
       ) : (
         <Register />

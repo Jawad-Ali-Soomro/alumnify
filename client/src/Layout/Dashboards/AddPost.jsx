@@ -1,75 +1,76 @@
 import React, { useState } from "react";
-import { Upload, X } from "lucide-react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { X, Image as ImageIcon, Link as LinkIcon, Hash } from "lucide-react";
+import axios from "axios";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
-
-const formSchema = yup.object({
-  title: yup.string().required("Title is required"),
-  content: yup.string().required("Content is required"),
-  tags: yup.string().optional(),
-  url: yup.string().url("Please enter a valid URL").optional(),
-});
 
 const AddPost = () => {
-  const [images, setImages] = useState([]);
-  const [previewImages, setPreviewImages] = useState([]);
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [images, setImages] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [tagInput, setTagInput] = useState("");
+  const [url, setUrl] = useState("");
   const user = JSON.parse(window.localStorage.getItem("user"));
 
-  const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: yupResolver(formSchema),
-    defaultValues: {
-      title: "",
-      content: "",
-      tags: "",
-      url: "",
-    },
-  });
-
-  const handleImageChange = (e) => {
+  const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
-    setImages(prev => [...prev, ...files]);
-    
-    const newPreviews = files.map(file => URL.createObjectURL(file));
-    setPreviewImages(prev => [...prev, ...newPreviews]);
+    const newImages = files.map(file => ({
+      file,
+      preview: URL.createObjectURL(file)
+    }));
+    setImages(prev => [...prev, ...newImages]);
   };
 
   const removeImage = (index) => {
-    setImages(prev => prev.filter((_, i) => i !== index));
-    setPreviewImages(prev => prev.filter((_, i) => i !== index));
+    setImages(prev => {
+      const newImages = [...prev];
+      URL.revokeObjectURL(newImages[index].preview);
+      newImages.splice(index, 1);
+      return newImages;
+    });
   };
 
-  const onSubmit = async (values) => {
-    setLoading(true);
+  const handleTagInput = (e) => {
+    if (e.key === 'Enter' && tagInput.trim()) {
+      e.preventDefault();
+      if (!tags.includes(tagInput.trim())) {
+        setTags(prev => [...prev, tagInput.trim()]);
+      }
+      setTagInput("");
+    }
+  };
+
+  const removeTag = (tagToRemove) => {
+    setTags(prev => prev.filter(tag => tag !== tagToRemove));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!title.trim() || !content.trim()) {
+      toast.error("Title and content are required");
+      return;
+    }
 
     try {
+      setLoading(true);
       const formData = new FormData();
-      formData.append("title", values.title);
-      formData.append("content", values.content);
+      formData.append("title", title);
+      formData.append("content", content);
       formData.append("author", user._id);
+      if (url) formData.append("url", url);
+      if (tags.length > 0) formData.append("tags", JSON.stringify(tags));
       
-      if (values.tags) {
-        const tagsArray = values.tags.split(",").map(tag => tag.trim());
-        formData.append("tags", JSON.stringify(tagsArray));
-      }
-
-      if (values.url) {
-        formData.append("url", values.url);
-      }
-
-      images.forEach((image) => {
-        formData.append("media", image);
+      images.forEach((image, index) => {
+        formData.append(`media`, image.file);
       });
 
-      await axios.post("http://localhost:8080/api/post/add", formData, {
+      const response = await axios.post("http://localhost:8080/api/post", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -79,103 +80,97 @@ const AddPost = () => {
       navigate("/");
     } catch (error) {
       console.error("Error creating post:", error);
-      toast.error("Failed to create post. Please try again.");
+      toast.error("Failed to create post");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center w-full items-center h-[90vh]">
-      <div className="w-full max-w-[800px] mt-20 bg-white">
-        <div className="p-4">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="space-y-1.5">
-              {/* <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Title
-              </label> */}
-              <Input 
-                placeholder="Enter post title" 
-                {...register("title")}
-                className="cursor-text"
+    <div className="w-full py-8">
+      <div className="max-w-[800px] mt-12 h-[70vh] mx-auto px-4">
+        <div className="rounded-lg p-6">
+          <form onSubmit={handleSubmit} className="space-y-2">
+            <div>
+              <Input
+                type="text"
+                placeholder="Post Title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="text-lg"
               />
-              {errors.title && (
-                <p className="text-sm font-medium text-destructive">{errors.title.message}</p>
-              )}
             </div>
 
-            <div className="space-y-1.5">
-              {/* <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Content
-              </label> */}
-              <Textarea 
-                placeholder="Write your post content here..." 
-                className="min-h-[100px] max-h-[100px] cursor-text"
-                {...register("content")}
+            <div>
+              <Textarea
+                placeholder="Write your post content..."
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                className="min-h-[200px] resize-none"
               />
-              {errors.content && (
-                <p className="text-sm font-medium text-destructive">{errors.content.message}</p>
-              )}
             </div>
 
-            <div className="space-y-1.5">
-              {/* <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                URL (optional)
-              </label> */}
-              <Input 
-                placeholder="https://example.com" 
-                {...register("url")}
-                className="cursor-text"
-              />
-              {errors.url && (
-                <p className="text-sm font-medium text-destructive">{errors.url.message}</p>
-              )}
-            </div>
-
-            <div className="space-y-1.5">
-              {/* <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Tags (comma separated)
-              </label> */}
-              <Input 
-                placeholder="tags - e.g., technology, programming, web" 
-                {...register("tags")}
-                className="cursor-text"
-              />
-              {errors.tags && (
-                <p className="text-sm font-medium text-destructive">{errors.tags.message}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              {/* <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Images
-              </label> */}
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors cursor-pointer">
-                <input
-                  type="file"
-                  multiple
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="hidden"
-                  id="image-upload"
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <LinkIcon className="w-5 h-5 text-gray-500" />
+                <Input
+                  type="url"
+                  placeholder="Add URL (optional)"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
                 />
-                <label
-                  htmlFor="image-upload"
-                  className="cursor-pointer flex flex-col items-center"
-                >
-                  <Upload className="w-8 h-8 text-gray-400 mb-2" />
-                  <span className="text-gray-600">
-                    Click to upload images or drag and drop
-                  </span>
-                </label>
               </div>
+            </div>
 
-              {previewImages.length > 0 && (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {previewImages.map((preview, index) => (
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Hash className="w-5 h-5 text-gray-500" />
+                <Input
+                  type="text"
+                  placeholder="Add tags (press Enter to add)"
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyDown={handleTagInput}
+                />
+              </div>
+              {tags.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm flex items-center gap-1"
+                    >
+                      #{tag}
+                      <button
+                        type="button"
+                        onClick={() => removeTag(tag)}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <ImageIcon className="w-5 h-5 text-gray-500" />
+                <Input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleImageUpload}
+                  className="cursor-pointer"
+                />
+              </div>
+              {images.length > 0 && (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+                  {images.map((image, index) => (
                     <div key={index} className="relative group">
                       <img
-                        src={preview}
+                        src={image.preview}
                         alt={`Preview ${index + 1}`}
                         className="w-full h-32 object-cover rounded-lg"
                       />
@@ -196,7 +191,7 @@ const AddPost = () => {
 
             <Button 
               type="submit" 
-              className="w-full h-12 uppercase cursor-pointer"
+              className="w-full h-11 uppercase cursor-pointer"
               disabled={loading}
             >
               {loading ? "Creating Post..." : "Create Post"}

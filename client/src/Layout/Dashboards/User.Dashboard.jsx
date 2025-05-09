@@ -260,7 +260,7 @@ const UserDashboard = () => {
               </div>
 
               <div className="px-2">
-                <h2 className="text-lg font-semibold mb-2">{post?.title}</h2>
+                <h2 className="text-lg mb-2">{post?.title}</h2>
                 <div className="relative">
                   <p
                     className={`text-gray-600 mb-3 w-full text-justify transition ${
@@ -358,7 +358,7 @@ const UserDashboard = () => {
                   <Share2 className="w-5 h-5" />
                 </button>
                 <button 
-                  onClick={() => window.open(post?.url, '_blank')}
+                  onClick={() => window.open(post?.media[0]?.url)}
                   className="flex items-center justify-center bg-gray-100 w-[33%] rounded-lg cursor-pointer h-12 hover:text-white hover:bg-blue-600 transition-colors"
                 >
                   <Link className="w-5 h-5" />
