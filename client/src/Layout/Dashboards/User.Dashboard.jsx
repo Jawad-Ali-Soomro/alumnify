@@ -1,4 +1,4 @@
-import { Heart, ChevronDown, ChevronUp, Share2, MoreVertical, Link, CalendarIcon } from "lucide-react";
+import { Heart, ChevronDown, ChevronUp, Share2, MoreVertical, Link, CalendarIcon, User } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
@@ -26,8 +26,6 @@ const UserDashboard = () => {
       console.error("Error fetching posts:", error);
     }
   };
-
-  console.log(users)
 
   const toggleExpand = (postId) => {
     setExpandedPosts((prev) => ({
@@ -78,17 +76,17 @@ const UserDashboard = () => {
 
   return (
     <div className="flex justify-center w-full overflow-y-auto">
-      <div className="flex justify-center items-center flex-col mt-20 py-4 mr-100">
+      <div className="flex justify-center items-center flex-col mt-20 py-4 w-full max-w-[800px] mx-auto">
         {posts?.map((post) => (
           <div
-            className="flex flex-col rounded-lg border border-gray-300 p-4 mb-4 w-full max-w-[500px] mx-auto"
+            className="flex flex-col rounded-lg border border-gray-300 p-4 mb-4 w-[95%] md:w-full max-w-[800px] mx-auto"
             key={post?._id}
           >
             <div className="flex items-center justify-between w-full px-2 py-2 mb-3">
               <div className="flex items-center space-x-3 cursor-pointer ">
                 <img
                   className="w-10 h-10 rounded-lg border bg-white"
-                  src={post?.author?.avatar || "/default-avatar.png"}
+                  src={post?.author?.avatar || "/avatar.avif"}
                   alt={post?.author?.username}
                 />
                 <HoverCard>
@@ -137,7 +135,7 @@ const UserDashboard = () => {
                 >
                   {post?.content}
                 </p>
-                {post?.content?.length > 100 && (
+                {post?.content?.length > 200 && (
                   <button
                     onClick={() => toggleExpand(post._id)}
                     className="text-blue-500 uppercase transition cursor-pointer hover:text-blue-700 mb-3 text-sm flex items-center justify-end w-full"
@@ -199,54 +197,6 @@ const UserDashboard = () => {
             </div>
           </div>
         ))}
-      </div>
-      <div className="bg-white border fixed w-[500px] pl-5 h-[100vh] right-0">
-        <div className="users flex flex-col mt-20">
-          {
-            users?.map((webUser) => {
-              return (
-               webUser._id !== user?._id &&  <div className="flex items-center justify-between border w-[95%] px-[2%] py-2 rounded-lg">
-               <div className="flex items-center space-x-2 cursor-pointer ">
-                 <img
-                   className="w-12 h-12 rounded-lg border bg-white"
-                   src={webUser?.avatar || "/default-avatar.png"}
-                   alt={webUser?.username}
-                 />
-                 <HoverCard>
-                   <HoverCardTrigger className="text-[20px]">@{webUser?.username}</HoverCardTrigger>
-                   <HoverCardContent className={"flex w-[300px] mt-2 ml-25"}>
-                     <Avatar className={"w-[50px] h-[50px] rounded-lg border"}>
-                       <AvatarImage src={webUser?.avatar}></AvatarImage>
-                     </Avatar>
-                     <div className="space-y-1 mt-2 ml-2">
-                       <h4 className="text-lg font-semibold">
-                         @{webUser?.username}
-                       </h4>
-                       <p className="text-sm mt-2 text-justify">
-                         {webUser?.bio || "No biography is available - this may indicate that user is new."}
-                       </p>
-                       <div className="flex items-center pt-2">
-                         <CalendarIcon className="mr-2 h-4 w-4 opacity-70" />
-                         <span className="text-xs text-muted-foreground">
-                           {"Joined " + new Date(webUser?.created_at).toLocaleDateString("en-US", {
-                             year: "numeric",
-                             month: "long",
-                             day: "numeric",
-                           })}
-                         </span>
-                       </div>
-                     </div>
-                   </HoverCardContent>
-                 </HoverCard>
-               </div>
-               <Button variant={'outline'} className={"w-12 h-12 bg-gray-100 cursor-pointer transition-colors"}>
-                <UserPlus />
-               </Button>
-             </div>
-              )
-            })
-          }
-        </div>
       </div>
     </div>
   );

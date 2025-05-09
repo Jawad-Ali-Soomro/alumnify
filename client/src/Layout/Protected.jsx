@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import AppSidebar from "./AppSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { User } from "lucide-react";
 
 const Protected = ({ children }) => {
   const token = window.localStorage.getItem("token");
@@ -25,41 +26,52 @@ const Protected = ({ children }) => {
     window.location.href = "/";
   }
 
-  console.log(user);
 
   return (
     <SidebarProvider>
       <AppSidebar />
       <div className="flex h-20 fixed top-0 border z-10 bg-white w-[100%] justify-end items-center px-4">
         <div className="flex" ref={infoRef}>
-          <img
-            src={user?.avatar}
-            className="w-[50px] h-[50px] border rounded-full cursor-pointer"
-            alt=""
-            onClick={() => setShowInfo(!showInfo)}
-          />
+          {user?.avatar ? (
+            <img
+              src={user.avatar}
+              className="w-[50px] h-[50px] border rounded-full cursor-pointer"
+              alt=""
+              onClick={() => setShowInfo(!showInfo)}
+            />
+          ) : (
+            <img
+              src="/avatar.avif"
+              className="w-[50px] h-[50px] border rounded-full cursor-pointer"
+              alt=""
+              onClick={() => setShowInfo(!showInfo)}
+            />
+          )}
           {showInfo && (
             <div className="absolute top-18 right-5 bg-white border rounded-lg p-4">
               <div className="flex items-center space-x-3">
-                <img
-                  src={user?.avatar}
-                  className="w-[50px] h-[50px] border rounded-full"
-                  alt=""
-                />
+                {user?.avatar ? (
+                  <img
+                    src={user.avatar}
+                    className="w-[50px] h-[50px] border rounded-full"
+                    alt=""
+                  />
+                ) : (
+                  <img
+                    src="/avatar.avif"
+                    className="w-[50px] h-[50px] border rounded-full"
+                    alt=""
+                  />
+                )}
                 <div>
                   <h2 className="text-lg font-semibold">{user?.username}</h2>
                   <p className="text-sm text-gray-500">{user?.email}</p>
                 </div>
               </div>
               <button
-                onClick={() => {
-                  window.localStorage.removeItem("token");
-                  window.localStorage.removeItem("user");
-                  window.location.href = "/";
-                }}
-                className="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg w-[100%] hover:bg-red-600 transition duration-200 cursor-pointer uppercase text-sm"
+                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg w-[100%] hover:bg-blue-600 transition duration-200 cursor-pointer uppercase text-sm"
               >
-                Logout
+                Profile
               </button>
               <button
                 onClick={() => {
@@ -67,10 +79,11 @@ const Protected = ({ children }) => {
                   window.localStorage.removeItem("user");
                   window.location.href = "/";
                 }}
-                className="mt-1 bg-blue-500 text-white px-4 py-2 rounded-lg w-[100%] hover:bg-blue-600 transition duration-200 cursor-pointer uppercase text-sm"
+                className="mt-1 bg-red-500 text-white px-4 py-2 rounded-lg w-[100%] hover:bg-red-600 transition duration-200 cursor-pointer uppercase text-sm"
               >
-                Profile
+                Logout
               </button>
+             
             </div>
           )}
         </div>
