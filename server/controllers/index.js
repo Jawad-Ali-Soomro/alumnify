@@ -1,4 +1,4 @@
 const { createPost, getPosts, toggleLikePost } = require("./post.controller");
-const { newUser, loginUser } = require("./user.controllers");
+const { newUser, loginUser, getAllUsers } = require("./user.controllers");
 
-module.exports = {newUser, loginUser, createPost, getPosts, toggleLikePost}
+module.exports = {newUser, loginUser, createPost, getPosts, toggleLikePost, getAllUsers}

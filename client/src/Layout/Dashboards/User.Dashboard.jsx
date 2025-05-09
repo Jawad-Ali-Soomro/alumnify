@@ -4,11 +4,14 @@ import axios from "axios";
 import { HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { HoverCard } from "@radix-ui/react-hover-card";
+import { Button } from "@/components/ui/button";
+import { UserPlus } from "lucide-react";
 
 const UserDashboard = () => {
   const [posts, setPosts] = useState([]);
   const [expandedPosts, setExpandedPosts] = useState({});
   const user = JSON.parse(window.localStorage.getItem("user"));
+  const [users, setUsers] = useState([]);
 
   const fetchPosts = async () => {
     try {
@@ -23,6 +26,8 @@ const UserDashboard = () => {
       console.error("Error fetching posts:", error);
     }
   };
+
+  console.log(users)
 
   const toggleExpand = (postId) => {
     setExpandedPosts((prev) => ({
@@ -58,8 +63,17 @@ const UserDashboard = () => {
     }
   };
 
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/api/user/all");
+      setUsers(response.data.users);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
   useEffect(() => {
     fetchPosts();
+    fetchUsers();
   }, []);
 
   return (
@@ -186,7 +200,54 @@ const UserDashboard = () => {
           </div>
         ))}
       </div>
-      <div className="bg-white border fixed w-[500px] h-[100vh] right-0"></div>
+      <div className="bg-white border fixed w-[500px] pl-5 h-[100vh] right-0">
+        <div className="users flex flex-col mt-20">
+          {
+            users?.map((webUser) => {
+              return (
+               webUser._id !== user?._id &&  <div className="flex items-center justify-between border w-[95%] px-[2%] py-2 rounded-lg">
+               <div className="flex items-center space-x-2 cursor-pointer ">
+                 <img
+                   className="w-12 h-12 rounded-lg border bg-white"
+                   src={webUser?.avatar || "/default-avatar.png"}
+                   alt={webUser?.username}
+                 />
+                 <HoverCard>
+                   <HoverCardTrigger className="text-[20px]">@{webUser?.username}</HoverCardTrigger>
+                   <HoverCardContent className={"flex w-[300px] mt-2 ml-25"}>
+                     <Avatar className={"w-[50px] h-[50px] rounded-lg border"}>
+                       <AvatarImage src={webUser?.avatar}></AvatarImage>
+                     </Avatar>
+                     <div className="space-y-1 mt-2 ml-2">
+                       <h4 className="text-lg font-semibold">
+                         @{webUser?.username}
+                       </h4>
+                       <p className="text-sm mt-2 text-justify">
+                         {webUser?.bio || "No biography is available - this may indicate that user is new."}
+                       </p>
+                       <div className="flex items-center pt-2">
+                         <CalendarIcon className="mr-2 h-4 w-4 opacity-70" />
+                         <span className="text-xs text-muted-foreground">
+                           {"Joined " + new Date(webUser?.created_at).toLocaleDateString("en-US", {
+                             year: "numeric",
+                             month: "long",
+                             day: "numeric",
+                           })}
+                         </span>
+                       </div>
+                     </div>
+                   </HoverCardContent>
+                 </HoverCard>
+               </div>
+               <Button variant={'outline'} className={"w-12 h-12 bg-gray-100 cursor-pointer transition-colors"}>
+                <UserPlus />
+               </Button>
+             </div>
+              )
+            })
+          }
+        </div>
+      </div>
     </div>
   );
 };
