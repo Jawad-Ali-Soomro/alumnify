@@ -44,7 +44,6 @@ const PostSkeleton = () => (
 );
 
 const SharePopup = ({ isOpen, onClose, post }) => {
-  const [copied, setCopied] = useState(false);
   const postUrl = window.location.origin + `/post/${post?._id}`;
 
   const shareOptions = [
@@ -65,17 +64,6 @@ const SharePopup = ({ isOpen, onClose, post }) => {
       icon: <Linkedin className="w-5 h-5" />,
       color: 'bg-blue-700 hover:bg-blue-800',
       onClick: () => window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postUrl)}`, '_blank')
-    },
-    {
-      name: 'Copy Link',
-      icon: copied ? <Copy className="w-5 h-5" /> : <Link2 className="w-5 h-5" />,
-      color: 'bg-gray-600 hover:bg-gray-700',
-      onClick: () => {
-        navigator.clipboard.writeText(postUrl);
-        setCopied(true);
-        toast.success("Link copied to clipboard!");
-        setTimeout(() => setCopied(false), 2000);
-      }
     }
   ];
 
@@ -97,7 +85,7 @@ const SharePopup = ({ isOpen, onClose, post }) => {
           </button>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 mb-4">
+        <div className="grid grid-cols-3 gap-3">
           {shareOptions.map((option, index) => (
             <button
               key={index}
@@ -108,26 +96,6 @@ const SharePopup = ({ isOpen, onClose, post }) => {
               <span>{option.name}</span>
             </button>
           ))}
-        </div>
-
-        <div className="relative">
-          <input
-            type="text"
-            value={postUrl}
-            readOnly
-            className="w-full p-2 pr-10 border rounded-lg bg-gray-50 text-sm"
-          />
-          <button
-            onClick={() => {
-              navigator.clipboard.writeText(postUrl);
-              setCopied(true);
-              toast.success("Link copied to clipboard!");
-              setTimeout(() => setCopied(false), 2000);
-            }}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-          >
-            {copied ? <Copy className="w-4 h-4" /> : <Link2 className="w-4 h-4" />}
-          </button>
         </div>
       </div>
     </div>
