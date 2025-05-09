@@ -4,10 +4,7 @@ import axios from "axios";
 import { HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { HoverCard } from "@radix-ui/react-hover-card";
-import { Button } from "@/components/ui/button";
-import { UserPlus } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { toast } from "sonner";
 
 const PostSkeleton = () => (
   <div className="flex flex-col rounded-lg border border-gray-300 p-4 mb-4 w-[95%] md:w-full max-w-[800px] mx-auto">
@@ -110,7 +107,6 @@ const UserDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [sharePost, setSharePost] = useState(null);
   const user = JSON.parse(window.localStorage.getItem("user"));
-  const [users, setUsers] = useState([]);
 
   const fetchPosts = async () => {
     try {
@@ -163,14 +159,7 @@ const UserDashboard = () => {
     }
   };
 
-  const fetchUsers = async () => {
-    try {
-      const response = await axios.get("http://localhost:8080/api/user/all");
-      setUsers(response.data.users);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-    }
-  };
+ 
 
   const handleImageClick = (image) => {
     setSelectedImage(image);
@@ -192,7 +181,6 @@ const UserDashboard = () => {
 
   useEffect(() => {
     fetchPosts();
-    fetchUsers();
   }, []);
 
   return (
