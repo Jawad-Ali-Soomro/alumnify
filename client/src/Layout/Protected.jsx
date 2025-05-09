@@ -30,7 +30,7 @@ const Protected = ({ children }) => {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <div className="flex h-20 fixed top-0 border z-10 bg-white w-[100%] justify-end items-center px-4">
+      <div className="flex h-20 fixed top-0 border  z-10 bg-white w-[100%] justify-end items-center px-4">
         <div className="flex" ref={infoRef}>
           {user?.avatar ? (
             <img
