@@ -30,6 +30,32 @@ const getPosts = async (req,res) => {
     })
 }
 
+const getPostById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const post = await Post.findById(id).populate("author");
+        
+        if (!post) {
+            return res.status(404).json({
+                success: false,
+                message: "Post not found!"
+            });
+        }
+
+        return res.json({
+            success: true,
+            message: "Post fetched successfully!",
+            post
+        });
+    } catch (error) {
+        console.error("Error fetching post:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Error fetching post",
+            error: error.message
+        });
+    }
+}
 
 const toggleLikePost = async (req, res) => {
   try {
@@ -61,9 +87,9 @@ const toggleLikePost = async (req, res) => {
   }
 };
 
-
 module.exports = {
     createPost,
     getPosts,
+    getPostById,
     toggleLikePost
 }
