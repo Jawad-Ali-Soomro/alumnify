@@ -64,10 +64,11 @@ const Protected = ({ children }) => {
                   />
                 )}
                 <div>
-                  <h2 className="text-lg font-semibold">{user?.username}</h2>
+                  <h2 className="text-sm font-semibold">{user?.username}</h2>
                   <p className="text-sm text-gray-500">{user?.email}</p>
                 </div>
               </div>
+              <div className="line w-[100%] border mt-4 h-[1px]"></div>
               <button
                 className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg w-[100%] hover:bg-blue-600 transition duration-200 cursor-pointer uppercase text-sm"
               >

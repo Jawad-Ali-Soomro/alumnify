@@ -129,7 +129,6 @@ const AddPost = () => {
 
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <LinkIcon className="w-5 h-5 text-gray-500" />
                 <Input
                   type="url"
                   placeholder="Add URL (optional)"
@@ -141,7 +140,6 @@ const AddPost = () => {
 
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <Hash className="w-5 h-5 text-gray-500" />
                 <Input
                   type="text"
                   placeholder="Add tags (press Enter to add)"
@@ -157,7 +155,7 @@ const AddPost = () => {
                       key={index}
                       className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm flex items-center gap-1"
                     >
-                      #{tag}
+                      {tag}
                       <button
                         type="button"
                         onClick={() => removeTag(tag)}
@@ -172,16 +170,21 @@ const AddPost = () => {
             </div>
 
             <div>
-              <div className="flex items-center gap-2 mb-2">
-                <ImageIcon className="w-5 h-5 text-gray-500" />
-                <Input
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  onChange={handleImageUpload}
-                  className="cursor-pointer"
-                />
-              </div>
+            <div className="border border-dashed border-gray-300 rounded-lg p-4 mb-4 relative">
+  <div className="flex items-center justify-center gap-2">
+    <ImageIcon className="w-5 h-5 text-gray-500" />
+    <input
+      type="file"
+      accept="image/*"
+      multiple
+      style={{
+        opacity: 0
+      }}
+      onChange={handleImageUpload}
+      className="cursor-pointer absolute w-[100%] left-0"
+    />
+  </div>
+</div>
               {images.length > 0 && (
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
                   {images.map((image, index) => (

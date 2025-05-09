@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const { connectDatabase } = require('./config/connectDatabase');
 const { userRouter, postRouter } = require('./routes');
+const connectDatabase = require('./config/connectDatabase');
 require('dotenv').config({
     path:'./config/.env'
 });
