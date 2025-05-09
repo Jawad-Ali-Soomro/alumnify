@@ -51,7 +51,7 @@ const AppSidebar = () => {
   const tabs = getNavigationTabs();
 
   return (
-    <div className="px-2 flex flex-col justify-start fixed h-[100vh] border align-center pt-2 gap-2">
+    <div className="px-2 flex flex-col justify-start fixed h-[100vh] pt-[2vh] z-20 bg-white border  align-center pt-2 gap-2">
       {tabs.map((tab, index) => (
         <div
           key={index}
