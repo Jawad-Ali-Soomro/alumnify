@@ -19,9 +19,11 @@ const PostSchema = new Schema({
     maxlength: 5000
   },
   media: [{
-    url: String,
     image: String
   }],
+  url: {
+    type: String
+  },
   tags: [{
     type: String,
     lowercase: true,

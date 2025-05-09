@@ -346,7 +346,7 @@ const UserDashboard = () => {
                   <Share2 className="w-5 h-5" />
                 </button>
                 <button 
-                  onClick={() => window.open(post?.media[0]?.url)}
+                  onClick={() => window.open(post?.media[0]?.url || post?.url)}
                   className="flex items-center justify-center bg-gray-100 w-[33%] rounded-lg cursor-pointer h-12 hover:text-white hover:bg-blue-600 transition-colors"
                 >
                   <Link className="w-5 h-5" />

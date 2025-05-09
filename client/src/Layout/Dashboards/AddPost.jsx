@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { uploadToPinata } from "@/Utils/uploadImage";
 
 const AddPost = () => {
   const navigate = useNavigate();
@@ -56,31 +57,47 @@ const AddPost = () => {
       toast.error("Title and content are required");
       return;
     }
-
+  
     try {
       setLoading(true);
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("content", content);
-      formData.append("author", user._id);
-      if (url) formData.append("url", url);
-      if (tags.length > 0) formData.append("tags", JSON.stringify(tags));
-      
-      images.forEach((image, index) => {
-        formData.append(`media`, image.file);
-      });
-
-      const response = await axios.post("http://localhost:8080/api/post", formData, {
+      const media = [];
+      for (const image of images) {
+        try {
+          const ipfsHash = await uploadToPinata(image.file);
+          const imageUrl = `https://gateway.pinata.cloud/ipfs/${ipfsHash.IpfsHash}`;
+          media.push({ image: imageUrl });
+          toast.success(`Image uploaded successfully!`);
+        } catch (error) {
+          console.error("Error uploading image:", error);
+          toast.error(`Failed to upload image: ${error.message}`);
+        }
+      }
+    
+      const postData = {
+        title,
+        content,
+        author: user._id,
+        ...(media.length > 0 && { media }),
+        ...(url && { url }),
+        ...(tags.length > 0 && { tags })
+      };
+  
+      const response = await axios.post("http://localhost:8080/api/post", postData, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
         },
       });
-
-      toast.success("Post created successfully!");
-      navigate("/");
+  
+      // Correct success check
+      if (response.status === 200 || response.status === 201) {
+        toast.success("Post created successfully!");
+        navigate("/");
+      } else {
+        toast.error("Failed to create post");
+      }
     } catch (error) {
       console.error("Error creating post:", error);
-      toast.error("Failed to create post");
+      toast.error(error.response?.data?.message || "Failed to create post");
     } finally {
       setLoading(false);
     }
@@ -203,4 +220,4 @@ const AddPost = () => {
   );
 };
 
-export default AddPost; 
+export default AddPost;
