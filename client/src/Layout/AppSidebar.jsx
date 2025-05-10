@@ -59,7 +59,7 @@ const AppSidebar = () => {
       <button 
         onClick={() => setIsOpen(!isOpen)}
         className={`md:hidden fixed top-4 z-30 p-2 rounded-lg bg-white cursor-pointer transition-all duration-300 ease-in-out
-          ${isOpen ? 'left-[70px]' : 'left-4'}`}
+          ${isOpen ? 'left-[90px]' : 'left-4'}`}
       >
         <Menu className="w-6 h-6" />
       </button>

@@ -113,9 +113,10 @@ const AddPost = () => {
         <div className="rounded-lg p-6">
           <form onSubmit={handleSubmit} className="space-y-2">
             <div>
+              <label htmlFor="title" className="text-sm font-medium">Title</label>
               <Input
                 type="text"
-                placeholder="Post Title"
+                // placeholder="Title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className="text-lg"
@@ -123,6 +124,8 @@ const AddPost = () => {
             </div>
       
             <div>
+
+            <label htmlFor="title" className="text-sm font-medium">Description</label>
   <Textarea
     placeholder="Write your post content..."
     value={content}

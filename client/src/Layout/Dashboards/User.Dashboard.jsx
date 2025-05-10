@@ -1,5 +1,5 @@
-import { Heart, ChevronDown, ChevronUp, Share2, MoreVertical, Link, CalendarIcon, User, ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut, Facebook, Twitter, Linkedin, Link2, Copy } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { Heart, ChevronDown, ChevronUp, Share2, MoreVertical, Link, CalendarIcon, User, ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut, Facebook, Twitter, Linkedin, Link2, Copy, UserPlus, BellOff, Bookmark, Flag, Pencil, Trash2, AlertTriangle } from "lucide-react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
@@ -99,6 +99,43 @@ const SharePopup = ({ isOpen, onClose, post }) => {
   );
 };
 
+const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm, postTitle }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center" onClick={onClose}>
+      <div 
+        className="bg-white rounded-lg p-6 w-[90%] max-w-md mx-auto"
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="flex items-center gap-3 mb-4">
+          <AlertTriangle className="w-6 h-6 text-red-500" />
+          <h3 className="text-lg font-semibold">Delete Post</h3>
+        </div>
+        
+        <p className="text-gray-600 mb-6">
+          Are you sure you want to delete this post? This action cannot be undone.
+        </p>
+
+        <div className="flex justify-end gap-3">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            className="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 transition-colors"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const UserDashboard = () => {
   const [posts, setPosts] = useState([]);
   const [expandedPosts, setExpandedPosts] = useState({});
@@ -106,7 +143,10 @@ const UserDashboard = () => {
   const [zoomLevel, setZoomLevel] = useState(1);
   const [loading, setLoading] = useState(true);
   const [sharePost, setSharePost] = useState(null);
+  const [openMenuId, setOpenMenuId] = useState(null);
+  const menuRef = useRef(null);
   const user = JSON.parse(window.localStorage.getItem("user"));
+  const [deletePostId, setDeletePostId] = useState(null);
 
   const fetchPosts = async () => {
     try {
@@ -159,7 +199,43 @@ const UserDashboard = () => {
     }
   };
 
- 
+  const handleAddFriend = async (userId) => {
+    console.log("Add friend:", userId);
+  };
+
+  const handleMuteUser = async (userId) => {
+    console.log("Mute user:", userId);
+  };
+
+  const handleSavePost = async (postId) => {
+    console.log("Save post:", postId);
+  };
+
+  const handleReportPost = async (postId) => {
+    console.log("Report post:", postId);
+  };
+
+  const handleDeletePost = async (postId) => {
+    try {
+      const response = await axios.delete(`http://localhost:8080/api/post/${postId}`, {
+        data: { userId: user._id }
+      });
+
+      if (response.data.success) {
+        setPosts(posts.filter(post => post._id !== postId));
+        setOpenMenuId(null);
+        setDeletePostId(null);
+      } else {
+        console.error("Error deleting post:", response.data.message);
+      }
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
+  };
+
+  const handleUpdatePost = (post) => {
+    console.log("Update post:", post);
+  };
 
   const handleImageClick = (image) => {
     setSelectedImage(image);
@@ -181,6 +257,19 @@ const UserDashboard = () => {
 
   useEffect(() => {
     fetchPosts();
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setOpenMenuId(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   return (
@@ -238,13 +327,74 @@ const UserDashboard = () => {
                     </HoverCardContent>
                   </HoverCard>
                 </div>
-                {user?._id !== post?.author?._id && (
-                  <div className="flex items-center justify-end">
-                    <button className="text-gray-500 hover:text-gray-700 w-[35px] border flex justify-center py-2 rounded-lg cursor-pointer">
+                  <div className="flex items-center justify-end relative" ref={menuRef}>
+                    <button 
+                      onClick={() => setOpenMenuId(openMenuId === post._id ? null : post._id)}
+                      className="text-gray-500 hover:text-gray-700 w-[35px] border flex justify-center py-2 rounded-lg cursor-pointer"
+                    >
                       <MoreVertical className="h-5 w-5" />
                     </button>
+                    
+                    {openMenuId === post._id && (
+                      <div className="absolute right-0 top-full mt-1 w-48 bg-white rounded-lg shadow-lg border z-50">
+                        <div className="py-1">
+                          {user?._id === post?.author?._id ? (
+                            <>
+                              <button
+                                onClick={() => handleUpdatePost(post)}
+                                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              >
+                                <Pencil className="w-4 h-4 mr-2" />
+                                Update Post
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setDeletePostId(post._id);
+                                  setOpenMenuId(null);
+                                }}
+                                className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                              >
+                                <Trash2 className="w-4 h-4 mr-2" />
+                                Delete Post
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <button
+                                onClick={() => handleAddFriend(post.author._id)}
+                                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              >
+                                <UserPlus className="w-4 h-4 mr-2" />
+                                Add Friend
+                              </button>
+                              <button
+                                onClick={() => handleMuteUser(post.author._id)}
+                                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              >
+                                <BellOff className="w-4 h-4 mr-2" />
+                                Mute User
+                              </button>
+                              <button
+                                onClick={() => handleSavePost(post._id)}
+                                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              >
+                                <Bookmark className="w-4 h-4 mr-2" />
+                                Save Post
+                              </button>
+                              <button
+                                onClick={() => handleReportPost(post._id)}
+                                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              >
+                                <Flag className="w-4 h-4 mr-2" />
+                                Report Post
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
-                )}
+              
               </div>
 
               <div className="px-2">
@@ -399,6 +549,13 @@ const UserDashboard = () => {
           </div>
         </div>
       )}
+
+      <DeleteConfirmationModal
+        isOpen={!!deletePostId}
+        onClose={() => setDeletePostId(null)}
+        onConfirm={() => handleDeletePost(deletePostId)}
+        postTitle={posts.find(p => p._id === deletePostId)?.title}
+      />
     </div>
   );
 };
