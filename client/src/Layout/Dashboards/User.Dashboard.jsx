@@ -113,8 +113,8 @@ const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm, postTitle }) => {
           <h3 className="text-lg font-semibold">Delete Post</h3>
         </div>
         
-        <p className="text-gray-600 mb-6">
-          Are you sure you want to delete this post? This action cannot be undone.
+        <p className="text-gray-600 mb-6 text-sm text-justify">
+          Are you sure you want to delete the post {postTitle} ? This action cannot be undone.
         </p>
 
         <div className="flex justify-end gap-3">
@@ -215,6 +215,11 @@ const UserDashboard = () => {
     console.log("Report post:", postId);
   };
 
+  const handleDeleteClick = (postId) => {
+    setDeletePostId(postId);
+    setOpenMenuId(null);
+  };
+
   const handleDeletePost = async (postId) => {
     try {
       const response = await axios.delete(`http://localhost:8080/api/post/${postId}`, {
@@ -223,7 +228,6 @@ const UserDashboard = () => {
 
       if (response.data.success) {
         setPosts(posts.filter(post => post._id !== postId));
-        setOpenMenuId(null);
         setDeletePostId(null);
       } else {
         console.error("Error deleting post:", response.data.message);
@@ -257,19 +261,6 @@ const UserDashboard = () => {
 
   useEffect(() => {
     fetchPosts();
-  }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setOpenMenuId(null);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
   }, []);
 
   return (
@@ -327,7 +318,8 @@ const UserDashboard = () => {
                     </HoverCardContent>
                   </HoverCard>
                 </div>
-                  <div className="flex items-center justify-end relative" ref={menuRef}>
+                <div className="flex items-center justify-end relative">
+                  <div className="relative">
                     <button 
                       onClick={() => setOpenMenuId(openMenuId === post._id ? null : post._id)}
                       className="text-gray-500 hover:text-gray-700 w-[35px] border flex justify-center py-2 rounded-lg cursor-pointer"
@@ -336,7 +328,10 @@ const UserDashboard = () => {
                     </button>
                     
                     {openMenuId === post._id && (
-                      <div className="absolute right-0 top-full mt-1 w-48 bg-white rounded-lg shadow-lg border z-50">
+                      <div 
+                        className="absolute right-0 top-full mt-1 w-48 bg-white rounded-lg shadow-lg border z-50"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         <div className="py-1">
                           {user?._id === post?.author?._id ? (
                             <>
@@ -348,10 +343,7 @@ const UserDashboard = () => {
                                 Update Post
                               </button>
                               <button
-                                onClick={() => {
-                                  setDeletePostId(post._id);
-                                  setOpenMenuId(null);
-                                }}
+                                onClick={() => handleDeleteClick(post._id)}
                                 className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50"
                               >
                                 <Trash2 className="w-4 h-4 mr-2" />
@@ -394,7 +386,7 @@ const UserDashboard = () => {
                       </div>
                     )}
                   </div>
-              
+                </div>
               </div>
 
               <div className="px-2">
@@ -550,12 +542,21 @@ const UserDashboard = () => {
         </div>
       )}
 
+      {/* Delete Confirmation Modal */}
       <DeleteConfirmationModal
         isOpen={!!deletePostId}
         onClose={() => setDeletePostId(null)}
         onConfirm={() => handleDeletePost(deletePostId)}
         postTitle={posts.find(p => p._id === deletePostId)?.title}
       />
+
+      {/* Add click outside handler for menu */}
+      {openMenuId && (
+        <div 
+          className="fixed inset-0 z-40"
+          onClick={() => setOpenMenuId(null)}
+        />
+      )}
     </div>
   );
 };
