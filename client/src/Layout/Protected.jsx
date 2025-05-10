@@ -30,7 +30,7 @@ const Protected = ({ children }) => {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <div className="flex h-20 fixed top-0 border  z-10 bg-white w-[100%] justify-end items-center px-4">
+      <div className="flex h-20 fixed top-0 border  z-10 w-[100%] justify-end items-center px-4">
         <div className="flex" ref={infoRef}>
           {user?.avatar ? (
             <img
@@ -48,7 +48,7 @@ const Protected = ({ children }) => {
             />
           )}
           {showInfo && (
-            <div className="absolute top-18 right-5 bg-white border rounded-lg p-4">
+            <div className="absolute top-18 right-5 bg-inherit border rounded-lg p-4">
               <div className="flex items-center space-x-3">
                 {user?.avatar ? (
                   <img

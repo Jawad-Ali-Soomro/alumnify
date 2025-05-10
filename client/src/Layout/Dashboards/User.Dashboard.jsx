@@ -1,4 +1,4 @@
-import { Heart, ChevronDown, ChevronUp, Share2, MoreVertical, Link, CalendarIcon, User, ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut, Facebook, Twitter, Linkedin, Link2, Copy, UserPlus, BellOff, Bookmark, Flag, Pencil, Trash2, AlertTriangle } from "lucide-react";
+import { Heart, ChevronDown, ChevronUp, Share2, MoreVertical, Link, CalendarIcon, User, ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut, Facebook, Twitter, Linkedin, Link2, Copy, UserPlus, BellOff, Bookmark, Flag, Pencil, Trash2, AlertTriangle, Edit, VolumeX } from "lucide-react";
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
@@ -99,34 +99,35 @@ const SharePopup = ({ isOpen, onClose, post }) => {
   );
 };
 
-const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm, postTitle }) => {
+const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center" onClick={onClose}>
+    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center" onClick={onClose}>
       <div 
-        className="bg-white rounded-lg p-6 w-[90%] max-w-md mx-auto"
+        className="bg-background border rounded-lg p-6 w-[90%] max-w-md mx-auto"
         onClick={e => e.stopPropagation()}
       >
-        <div className="flex items-center gap-3 mb-4">
-          <AlertTriangle className="w-6 h-6 text-red-500" />
+        <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold">Delete Post</h3>
+          <button 
+            onClick={onClose}
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
-        
-        <p className="text-gray-600 mb-6 text-sm text-justify">
-          Are you sure you want to delete the post {postTitle} ? This action cannot be undone.
-        </p>
-
-        <div className="flex justify-end gap-3">
+        <p className="text-muted-foreground mb-4">Are you sure you want to delete this post? This action cannot be undone.</p>
+        <div className="flex justify-end gap-2">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+            className="px-4 py-2 rounded-lg bg-accent hover:bg-accent/80 text-accent-foreground"
           >
             Cancel
           </button>
           <button
             onClick={onConfirm}
-            className="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 transition-colors"
+            className="px-4 py-2 rounded-lg bg-destructive text-white" 
           >
             Delete
           </button>
@@ -281,7 +282,7 @@ const UserDashboard = () => {
         ) : (
           posts?.map((post) => (
             <div
-              className="flex flex-col rounded-lg border border-gray-300 p-4 mb-4 w-[95%] md:w-full max-w-[800px] mx-auto"
+              className="bg-background border rounded-lg p-4 mb-4"
               key={post?._id}
             >
               <div className="flex items-center justify-between w-full px-2 py-2 mb-3">
@@ -327,64 +328,61 @@ const UserDashboard = () => {
                       <MoreVertical className="h-5 w-5" />
                     </button>
                     
-                    {openMenuId === post._id && (
-                      <div 
-                        className="absolute right-0 top-full mt-1 w-48 bg-white rounded-lg shadow-lg border z-50"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <div className="py-1">
-                          {user?._id === post?.author?._id ? (
-                            <>
-                              <button
-                                onClick={() => handleUpdatePost(post)}
-                                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                              >
-                                <Pencil className="w-4 h-4 mr-2" />
-                                Update Post
-                              </button>
-                              <button
-                                onClick={() => handleDeleteClick(post._id)}
-                                className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50"
-                              >
-                                <Trash2 className="w-4 h-4 mr-2" />
-                                Delete Post
-                              </button>
-                            </>
-                          ) : (
-                            <>
-                              <button
-                                onClick={() => handleAddFriend(post.author._id)}
-                                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                              >
-                                <UserPlus className="w-4 h-4 mr-2" />
-                                Add Friend
-                              </button>
-                              <button
-                                onClick={() => handleMuteUser(post.author._id)}
-                                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                              >
-                                <BellOff className="w-4 h-4 mr-2" />
-                                Mute User
-                              </button>
-                              <button
-                                onClick={() => handleSavePost(post._id)}
-                                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                              >
-                                <Bookmark className="w-4 h-4 mr-2" />
-                                Save Post
-                              </button>
-                              <button
-                                onClick={() => handleReportPost(post._id)}
-                                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                              >
-                                <Flag className="w-4 h-4 mr-2" />
-                                Report Post
-                              </button>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    )}
+                    <div 
+                      className={`absolute top-3 right-0 mt-8 bg-background border w-[200px] rounded-lg shadow-lg z-50 ${
+                        openMenuId === post._id ? 'block' : 'hidden'
+                      }`}
+                    >
+                      {post.author?._id === user._id ? (
+                        <>
+                          <button
+                            onClick={() => handleUpdatePost(post)}
+                            className="flex items-center gap-2 w-full px-4 py-2 text-left hover:bg-accent text-accent-foreground"
+                          >
+                            <Edit className="w-4 h-4" />
+                            Edit Post
+                          </button>
+                          <button
+                            onClick={() => handleDeleteClick(post._id)}
+                            className="flex items-center gap-2 w-full px-4 py-2 text-left hover:bg-accent text-destructive-foreground"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                            Delete Post
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            onClick={() => handleAddFriend(post.userId)}
+                            className="flex items-center gap-2 w-full px-4 py-2 text-left hover:bg-accent text-accent-foreground"
+                          >
+                            <UserPlus className="w-4 h-4" />
+                            Add Friend
+                          </button>
+                          <button
+                            onClick={() => handleMuteUser(post.userId)}
+                            className="flex items-center gap-2 w-full px-4 py-2 text-left hover:bg-accent text-accent-foreground"
+                          >
+                            <VolumeX className="w-4 h-4" />
+                            Mute User
+                          </button>
+                          <button
+                            onClick={() => handleSavePost(post._id)}
+                            className="flex items-center gap-2 w-full px-4 py-2 text-left hover:bg-accent text-accent-foreground"
+                          >
+                            <Bookmark className="w-4 h-4" />
+                            Save Post
+                          </button>
+                          <button
+                            onClick={() => handleReportPost(post._id)}
+                            className="flex items-center gap-2 w-full px-4 py-2 text-left hover:bg-accent text-destructive-foreground"
+                          >
+                            <Flag className="w-4 h-4" />
+                            Report Post
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -473,23 +471,27 @@ const UserDashboard = () => {
                 )}
               </div>
 
-              <div className="flex items-center justify-between px-2 pt-2 border-t border-gray-100">
+              <div className="flex items-center justify-between px-2 pt-2 border-t border-border">
                 <button
                   onClick={() => handleLike(post._id)}
                   className={`flex items-center justify-center w-[33%] h-12 rounded-lg cursor-pointer transition-colors 
-                    ${isPostLikedByUser(post, user._id) ? "bg-red-500 text-white" : "bg-gray-100 hover:bg-red-500 hover:text-white"}`}
+                    ${isPostLikedByUser(post, user._id) 
+                      ? "bg-destructive text-destructive-foreground" 
+                      : "bg-accent hover:bg-accent hover:text-destructive-foreground"}`}
                 >
-                  {isPostLikedByUser(post, user._id) ? <Heart className="w-5 h-5" fill="white" /> : <Heart className="w-5 h-5" />}
+                  {isPostLikedByUser(post, user._id) 
+                    ? <Heart className="w-5 h-5" fill="currentColor" /> 
+                    : <Heart className="w-5 h-5" />}
                 </button>
                 <button 
                   onClick={() => setSharePost(post)}
-                  className="flex items-center justify-center bg-gray-100 w-[33%] rounded-lg cursor-pointer h-12 hover:text-white hover:bg-blue-600 transition-colors"
+                  className="flex items-center justify-center bg-accent hover:bg-primary hover:text-primary-foreground w-[33%] rounded-lg cursor-pointer h-12 transition-colors"
                 >
                   <Share2 className="w-5 h-5" />
                 </button>
                 <button 
                   onClick={() => window.open(post?.media[0]?.url || post?.url)}
-                  className="flex items-center justify-center bg-gray-100 w-[33%] rounded-lg cursor-pointer h-12 hover:text-white hover:bg-blue-600 transition-colors"
+                  className="flex items-center justify-center bg-accent hover:bg-primary hover:text-primary-foreground w-[33%] rounded-lg cursor-pointer h-12 transition-colors"
                 >
                   <Link className="w-5 h-5" />
                 </button>
@@ -547,7 +549,6 @@ const UserDashboard = () => {
         isOpen={!!deletePostId}
         onClose={() => setDeletePostId(null)}
         onConfirm={() => handleDeletePost(deletePostId)}
-        postTitle={posts.find(p => p._id === deletePostId)?.title}
       />
 
       {/* Add click outside handler for menu */}

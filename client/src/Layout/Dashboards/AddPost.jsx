@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { uploadToPinata } from "@/Utils/uploadImage";
+import { useTheme } from "next-themes";
+import { Sun, Moon } from "lucide-react";
 
 const AddPost = () => {
   const navigate = useNavigate();
@@ -18,6 +20,7 @@ const AddPost = () => {
   const [tagInput, setTagInput] = useState("");
   const [url, setUrl] = useState("");
   const user = JSON.parse(window.localStorage.getItem("user"));
+  const { theme, setTheme } = useTheme();
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);

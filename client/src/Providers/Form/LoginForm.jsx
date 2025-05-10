@@ -97,13 +97,13 @@ const LoginForm = () => {
         </Button>
         <div className="w-90 border h-1/8 bg-[#086498]"></div>
         <div className="flex justify-between w-90">
-          <div className="w-10 flex justify-center items-center h-10 bg-white rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-all duration-200 ease-in-out">
+          <div className="w-10 flex justify-center items-center h-10 border rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-all duration-200 ease-in-out">
             <FcGoogle />
           </div>
-          <div className="w-10 flex justify-center items-center h-10 bg-white rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-all duration-200 ease-in-out">
+          <div className="w-10 flex justify-center items-center h-10 border rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-all duration-200 ease-in-out">
             <RiGithubLine />
           </div>
-          <div className="w-10 flex justify-center items-center h-10 bg-white rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-all duration-200 ease-in-out">
+          <div className="w-10 flex justify-center items-center h-10 border rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-all duration-200 ease-in-out">
             <FaXTwitter />
           </div>
           <Button
