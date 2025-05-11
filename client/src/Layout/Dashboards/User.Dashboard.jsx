@@ -5,6 +5,7 @@ import { HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { HoverCard } from "@radix-ui/react-hover-card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
 
 const PostSkeleton = () => (
   <div className="flex flex-col rounded-lg border border-gray-300 p-4 mb-4 w-[95%] md:w-full max-w-[800px] mx-auto">
@@ -200,9 +201,6 @@ const UserDashboard = () => {
     }
   };
 
-  const handleAddFriend = async (userId) => {
-    console.log("Add friend:", userId);
-  };
 
   const handleMuteUser = async (userId) => {
     console.log("Mute user:", userId);
@@ -329,7 +327,7 @@ const UserDashboard = () => {
                     </button>
                     
                     <div 
-                      className={`absolute top-3 right-0 mt-8 bg-background border w-[200px] rounded-lg shadow-lg z-50 ${
+                      className={`absolute top-3 right-0 mt-8 bg-background overflow-hidden border w-[200px] rounded-lg shadow-lg z-50 ${
                         openMenuId === post._id ? 'block' : 'hidden'
                       }`}
                     >
@@ -344,7 +342,7 @@ const UserDashboard = () => {
                           </button>
                           <button
                             onClick={() => handleDeleteClick(post._id)}
-                            className="flex items-center gap-2 w-full px-4 py-2 text-left hover:bg-accent text-destructive-foreground"
+                            className="flex items-center gap-2 w-full px-4 py-2 text-left hover:bg-destructive hover:text-white"
                           >
                             <Trash2 className="w-4 h-4" />
                             Delete Post
@@ -353,7 +351,6 @@ const UserDashboard = () => {
                       ) : (
                         <>
                           <button
-                            onClick={() => handleAddFriend(post.userId)}
                             className="flex items-center gap-2 w-full px-4 py-2 text-left hover:bg-accent text-accent-foreground"
                           >
                             <UserPlus className="w-4 h-4" />
@@ -476,11 +473,11 @@ const UserDashboard = () => {
                   onClick={() => handleLike(post._id)}
                   className={`flex items-center justify-center w-[33%] h-12 rounded-lg cursor-pointer transition-colors 
                     ${isPostLikedByUser(post, user._id) 
-                      ? "bg-destructive text-destructive-foreground" 
-                      : "bg-accent hover:bg-accent hover:text-destructive-foreground"}`}
+                      ? "bg-destructive text-white" 
+                      : "bg-accent"}`}
                 >
                   {isPostLikedByUser(post, user._id) 
-                    ? <Heart className="w-5 h-5" fill="currentColor" /> 
+                    ? <Heart className="w-5 h-5" fill="white" /> 
                     : <Heart className="w-5 h-5" />}
                 </button>
                 <button 

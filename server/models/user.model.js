@@ -39,6 +39,27 @@ const UserSchema = new Schema({
     enum: ['active', 'suspended', 'deactivated'], 
     default: 'active' 
   },
+  phone: {
+    type: Number,
+    default: null
+  },
+  field : {
+    type: String,
+    default: ""
+  },
+  company: {
+    type: String,
+    default: ""
+  },
+  university: {
+    type: String,
+    default: ""
+  },
+  graduationYear: {
+    type: Number,
+    default: null
+  },
+
   last_login: { type: Date },
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: Date.now },

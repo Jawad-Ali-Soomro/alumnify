@@ -7,8 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { uploadToPinata } from "@/Utils/uploadImage";
-import { useTheme } from "next-themes";
-import { Sun, Moon } from "lucide-react";
 
 const AddPost = () => {
   const navigate = useNavigate();
@@ -20,7 +18,6 @@ const AddPost = () => {
   const [tagInput, setTagInput] = useState("");
   const [url, setUrl] = useState("");
   const user = JSON.parse(window.localStorage.getItem("user"));
-  const { theme, setTheme } = useTheme();
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
@@ -124,28 +121,30 @@ const AddPost = () => {
                 className="text-lg"
               />
             </div>
-      
+
             <div>
+              <Textarea
+                placeholder="Write your post content..."
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                className="min-h-[200px] resize-none bg-accent/30"
+                maxLength={1000}
+              />
+              <div
+                className={`text-right text-sm mt-4 mb-4 ${
+                  content.length > 800
+                    ? "text-orange-500"
+                    : "text-muted-foreground"
+                } ${content.length >= 998 ? "font-semibold text-red-600" : ""}`}
+              >
+                {content.length}/1000 characters
+                {content.length > 950 &&
+                  content.length < 999 &&
+                  " (Approaching limit)"}
+                {content.length > 999 && " (Maximum reached)"}
+              </div>
+            </div>
 
-  <Textarea
-    placeholder="Write your post content..."
-    value={content}
-    onChange={(e) => setContent(e.target.value)}
-    className="min-h-[200px] resize-none"
-    maxLength={1000}
-  />
-  <div className={`text-right text-sm mt-4 mb-4 ${
-    content.length > 800 ? 'text-orange-500' : 'text-muted-foreground'
-  } ${
-    content.length >= 998 ? 'font-semibold text-red-600' : ''
-  }`}>
-    {content.length}/1000 characters
-    {content.length > 950 && content.length < 999 && ' (Approaching limit)'}
-    {content.length > 999 && ' (Maximum reached)'}
-  </div>
-</div>
-
-            
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <Input
@@ -157,7 +156,6 @@ const AddPost = () => {
               </div>
             </div>
 
-            
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <Input
@@ -169,7 +167,6 @@ const AddPost = () => {
                 />
               </div>
 
-      
               {tags.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-2">
                   {tags.map((tag, index) => (
@@ -187,14 +184,12 @@ const AddPost = () => {
                       </button>
                     </span>
                   ))}
-
-             
                 </div>
               )}
             </div>
 
             <div>
-              <div className="border border-dashed border-gray-300 rounded-lg p-4 mb-4 relative">
+              <div className="border border-dashed border-gray-300 rounded-lg p-4 mb-4 bg-accent/30 relative">
                 <div className="flex flex-col items-center justify-center gap-2">
                   <ImageIcon className="w-5 h-5 text-gray-500" />
                   <p>Upload Images or drag images here to upload!</p>

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import AppSidebar from "./AppSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { User } from "lucide-react";
+import {useNavigate} from 'react-router-dom'
 
 const Protected = ({ children }) => {
   const token = window.localStorage.getItem("token");
@@ -25,6 +25,8 @@ const Protected = ({ children }) => {
   if (!token) {
     window.location.href = "/";
   }
+
+  const navigate = useNavigate()
 
 
   return (
@@ -70,6 +72,7 @@ const Protected = ({ children }) => {
               </div>
               <div className="line w-[100%] border mt-4 h-[1px]"></div>
               <button
+              onClick={() => navigate('/profile')}
                 className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg w-[100%] hover:bg-blue-600 transition duration-200 cursor-pointer uppercase text-sm"
               >
                 Profile

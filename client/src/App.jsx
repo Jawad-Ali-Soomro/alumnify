@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Login, Register } from "./Providers";
 import { Dashboard, Protected } from "./Layout";
 import AddPost from "./Layout/Dashboards/AddPost";
+import Profile from "./Pages/Profile";
 function App() {
   const token = window.localStorage.getItem("token");
 
@@ -36,6 +37,16 @@ function App() {
         </Protected>
       ) : (
         <Register />
+      ),
+    },
+      {
+      path: "/profile",
+      element: token ? (
+        <Protected>
+          <Profile />
+        </Protected>
+      ) : (
+        <Login />
       ),
     },
   ];
