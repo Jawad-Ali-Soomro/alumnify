@@ -1,4 +1,13 @@
 * {
   font-family: "Kanit";
+  border-radius: 25px;
 }
 
+.icon  {
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.image {
+  border-radius: 50%;
+}

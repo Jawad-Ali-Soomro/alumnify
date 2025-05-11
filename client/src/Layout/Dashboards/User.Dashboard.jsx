@@ -106,29 +106,29 @@ const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
   return (
     <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center" onClick={onClose}>
       <div 
-        className="bg-background border rounded-lg p-6 w-[90%] max-w-md mx-auto"
+        className="bg-background border rounded-lg p-6 w-[300px] max-w-md items-center justify-center mx-auto"
         onClick={e => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold">Delete Post</h3>
-          <button 
+        <div className="flex items-center justify-between flex-col mb-4">
+          <h3 className="text-lg text-destructive font-semibold">Delete</h3>
+          {/* <button 
             onClick={onClose}
             className="text-muted-foreground hover:text-foreground transition-colors"
           >
             <X className="w-5 h-5" />
-          </button>
+          </button> */}
         </div>
-        <p className="text-muted-foreground mb-4">Are you sure you want to delete this post? This action cannot be undone.</p>
+        <p className="text-muted-foreground mb-4">You surely want to delete this post.</p>
         <div className="flex justify-end gap-2">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-accent hover:bg-accent/80 text-accent-foreground"
+            className="w-[50%] h-10 cursor-pointer rounded-lg bg-accent hover:bg-accent/80 text-accent-foreground"
           >
             Cancel
           </button>
           <button
             onClick={onConfirm}
-            className="px-4 py-2 rounded-lg bg-destructive text-white" 
+            className="w-[50%] h-10 cursor-pointer rounded-lg bg-destructive text-white" 
           >
             Delete
           </button>
@@ -507,7 +507,9 @@ const UserDashboard = () => {
 
       {/* Full Screen Image Modal */}
       {selectedImage && (
-        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center" onClick={handleCloseImage}>
+        <div className="fixed inset-0 bg-black/90 z-50 flex rounded-none items-center justify-center" style={{
+          borderRadius: 0
+        }} onClick={handleCloseImage}>
           <div className="relative w-full h-full flex items-center justify-center" onClick={e => e.stopPropagation()}>
             <img
               src={selectedImage}

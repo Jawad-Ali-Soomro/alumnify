@@ -72,7 +72,11 @@ const AppSidebar = () => {
       <div className={`fixed h-[100vh] z-20 bg-background border top-0 left-0 transition-transform duration-300 ease-in-out
         ${isOpen ? 'translate-x-0' : '-translate-x-full'} 
         md:translate-x-0
-        px-2 flex flex-col justify-start pt-[2vh] align-center pt-2 gap-2`}>
+        px-2 flex flex-col justify-start pt-[2vh] align-center pt-2 gap-2`}
+        style={{
+          borderRadius: 0
+        }}
+        >
         {tabs.map((tab, index) => (
           <div
             key={index}
@@ -86,7 +90,7 @@ const AppSidebar = () => {
                 : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
             }`}
           >
-            <tab.icon className="w-5 h-5" style={{
+            <tab.icon className="w-5 h-5 icon" style={{
               scale: activeTab === tab.path ? "1.2" : "1",
               transition:'300ms'
             }} />

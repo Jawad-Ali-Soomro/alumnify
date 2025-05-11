@@ -4,6 +4,7 @@ import axios from "axios";
 import {  uploadToPinata } from "@/Utils/uploadImage"; //
 import { Info, Check, Mail, Plus, Phone, User, Briefcase, GraduationCap, MapPin, Save } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { Camera } from "lucide-react";
 
 const Profile = () => {
   const [userInfo, setInfo] = useState({});
@@ -60,7 +61,7 @@ const Profile = () => {
 
   const renderEditableField = (field, icon, placeholder) => (
     <div className="flex justify-between items-center gap-2">
-      <div className="icon flex p-2 bg-background border rounded-full">
+      <div className="rounded-full flex p-2 bg-background border rounded-full">
         {icon}
       </div>
       {isEditing ? (
@@ -75,7 +76,7 @@ const Profile = () => {
         <span className="text-start w-[100%] text-sm truncate">{userInfo[field] || `No ${field} added`}</span>
       )}
       <div 
-        className="icon flex p-2 bg-background border rounded-full cursor-pointer"
+        className="flex p-2 bg-background border rounded-full cursor-pointer"
         onClick={startEditing}
       >
         {userInfo[field] ? <Check size={15} /> : <Plus size={15} />}
@@ -84,17 +85,26 @@ const Profile = () => {
   );
 
   return (
-    <div className="flex items-center w-[80%] ml-[10%] mt-20 justify-between">
+    <div className="flex items-center justify-center w-[80%] ml-[10%] mt-20 flex-col min-h-[80vh]">
       <div className="left-side flex flex-col p-4 justify-between items-center border rounded-[20px] shadow-lg gap-2 w-[600px]">
-        <div className="image flex flex-col items-center gap-2">
-          <img src={tempInfo.avatar || userInfo.avatar} className="w-[200px] h-[200px] border rounded-full object-cover" alt="Avatar" />
+        <div className="image flex flex-col items-center gap-2 relative">
+          <img src={tempInfo.avatar || userInfo.avatar} className="w-[200px] image h-[200px] border rounded-full object-cover" alt="Avatar" />
           {isEditing && (
-            <Input 
+           <div className="flex items-center cursor-pointer z-10 w-[50px] h-[50px] bg-gray-200 flex items-center justify-center absolute bottom-0 right-0">
+            <Camera className="icon" />
+             <input 
               type="file" 
               accept="image/*" 
+              style={{
+                opacity: 0,
+                position:'absolute',
+                width:'100%',
+                height:'100%'
+              }}
               onChange={handleImageUpload} 
               className="w-full text-sm" 
             />
+           </div>
           )}
           {uploading && <span className="text-xs text-gray-500">Uploading...</span>}
         </div>
@@ -113,9 +123,9 @@ const Profile = () => {
             <div className="flex justify-center mt-4">
               <button
                 onClick={handleSaveChanges}
-                className="flex items-center justify-center gap-2 px-4 w-[100%] py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                className="flex items-center cursor-pointer justify-center gap-2 px-4 w-[100%] py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
               >
-                <Save size={18} />
+                {/* <Save size={18} /> */}
                 Apply Changes
               </button>
             </div>
