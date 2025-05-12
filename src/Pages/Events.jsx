@@ -66,8 +66,8 @@ const Events = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <kbd className="hidden md:inline-flex items-center px-2 py-1 bg-gray-100 rounded text-xs ml-2">
-              ⌘K
+            <kbd className="hidden md:inline-flex items-center w-[65px] px-2 py-1 bg-gray-100 rounded text-xs ml-2">
+              ⌘ + K
             </kbd>
           </div>
         </div>

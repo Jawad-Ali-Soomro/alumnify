@@ -286,7 +286,7 @@ const UserDashboard = () => {
               key={post?._id}
             >
               <div className="flex items-center justify-between w-full px-2 py-2 mb-3">
-                <div className="flex items-center space-x-3 cursor-pointer" onClick={() => navigate(`/user/${user._id}`)}>
+                <div className="flex items-center space-x-3 cursor-pointer" onClick={() => {post?.author?._id === user._id ?  navigate(`/profile`) :  navigate(`/user/${post?.author?._id}`)}}>
                   <img
                     className="w-10 h-10 rounded-lg border bg-white"
                     src={post?.author?.avatar || "/avatar.avif"}
@@ -388,11 +388,16 @@ const UserDashboard = () => {
 
               <div className="px-2">
                 <h2 className="text-lg mb-2">{post?.title}</h2>
-                <div className="relative">
+                <div className="relative" style={{
+                  borderRadius: '0'
+                }}>
                   <p
                     className={`text-gray-600 mb-3 w-full text-justify transition ${
                       expandedPosts[post._id] ? "" : "line-clamp-2"
                     }`}
+                    style={{
+                      borderRadius: 0
+                    }}
                   >
                     {post?.content}
                   </p>
