@@ -5,6 +5,11 @@ import { Login, Register } from "./Providers";
 import { Dashboard, Protected } from "./Layout";
 import AddPost from "./Layout/Dashboards/AddPost";
 import Profile from "./Pages/Profile";
+import Users from "./Pages/Users";
+import UserProfile from "./Pages/User.Profile";
+import { CreateEventForm } from "./Providers/Form/EventRegistration";
+import Events from "./Pages/Events";
+import UserEvents from "./Pages/UserEvents";
 function App() {
   const token = window.localStorage.getItem("token");
 
@@ -39,11 +44,61 @@ function App() {
         <Register />
       ),
     },
-      {
+    {
       path: "/profile",
       element: token ? (
         <Protected>
           <Profile />
+        </Protected>
+      ) : (
+        <Login />
+      ),
+    },
+    {
+      path: "/admin/users",
+      element: token ? (
+        <Protected>
+          <Users />
+        </Protected>
+      ) : (
+        <Login />
+      ),
+    },
+    {
+      path: "/user/:userId",
+      element: token ? (
+        <Protected>
+          <UserProfile />
+        </Protected>
+      ) : (
+        <Login />
+      ),
+    },
+    {
+      path: "/admin/create/event",
+      element: token ? (
+        <Protected>
+          <CreateEventForm />
+        </Protected>
+      ) : (
+        <Login />
+      ),
+    },
+    {
+      path: "/admin/events",
+      element: token ? (
+        <Protected>
+          <Events />
+        </Protected>
+      ) : (
+        <Login />
+      ),
+    },
+     {
+      path: "/events",
+      element: token ? (
+        <Protected>
+          <UserEvents />
         </Protected>
       ) : (
         <Login />
@@ -60,7 +115,6 @@ function App() {
               <Route key={index} path={route.path} element={route.element} />
             );
           })}
-          
         </Routes>
       </BrowserRouter>
     </>

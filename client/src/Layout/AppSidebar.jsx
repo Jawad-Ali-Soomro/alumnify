@@ -91,7 +91,7 @@ const AppSidebar = () => {
             }`}
           >
             <tab.icon className="w-5 h-5 icon" style={{
-              scale: activeTab === tab.path ? "1.2" : "1",
+              scale: activeTab === tab.path ? "1" : "1",
               transition:'300ms'
             }} />
           </div>

@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const { userRouter, postRouter } = require('./routes');
+const { userRouter, postRouter, eventRoute } = require('./routes');
 const connectDatabase = require('./config/connectDatabase');
 require('dotenv').config({
     path:'./config/.env'
@@ -16,6 +16,7 @@ app.use(cors({
 app.use(express.json())
 app.use('/api/user', userRouter)
 app.use('/api/post', postRouter)
+app.use('/api/event', eventRoute)
 
 app.listen(port, () => {
     console.log(`server is running`);

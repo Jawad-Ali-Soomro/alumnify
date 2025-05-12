@@ -5,7 +5,7 @@ import { HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { HoverCard } from "@radix-ui/react-hover-card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { toast } from "sonner";
+import { useNavigate } from 'react-router-dom'
 
 const PostSkeleton = () => (
   <div className="flex flex-col rounded-lg border border-gray-300 p-4 mb-4 w-[95%] md:w-full max-w-[800px] mx-auto">
@@ -88,7 +88,7 @@ const SharePopup = ({ isOpen, onClose, post }) => {
             <button
               key={index}
               onClick={option.onClick}
-              className={`flex items-center justify-center gap-2 p-3 rounded-lg text-white ${option.color} transition-colors`}
+              className={`flex items-center icon justify-center gap-2 p-3 rounded-lg text-white ${option.color} transition-colors`}
             >
               {option.icon}
               <span>{option.name}</span>
@@ -104,7 +104,7 @@ const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center" onClick={onClose}>
+    <div className="fixed inset-0 backdrop-blur-sm z-50 flex items-center justify-center" onClick={onClose}>
       <div 
         className="bg-background border rounded-lg p-6 w-[300px] max-w-md items-center justify-center mx-auto"
         onClick={e => e.stopPropagation()}
@@ -262,6 +262,8 @@ const UserDashboard = () => {
     fetchPosts();
   }, []);
 
+  const navigate = useNavigate()
+
   return (
     <div className="flex justify-center w-full overflow-y-auto">
       <div className="flex justify-center items-center flex-col mt-20 py-4 w-full max-w-[800px] mx-auto">
@@ -284,7 +286,7 @@ const UserDashboard = () => {
               key={post?._id}
             >
               <div className="flex items-center justify-between w-full px-2 py-2 mb-3">
-                <div className="flex items-center space-x-3 cursor-pointer ">
+                <div className="flex items-center space-x-3 cursor-pointer" onClick={() => navigate(`/user/${user._id}`)}>
                   <img
                     className="w-10 h-10 rounded-lg border bg-white"
                     src={post?.author?.avatar || "/avatar.avif"}
@@ -459,7 +461,7 @@ const UserDashboard = () => {
                     {post.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="text-xs bg-gray-100 cursor-pointer text-black px-4 py-2 rounded-lg"
+                        className="text-xs cursor-pointer text-white bg-[#333] px-4 py-2 rounded-lg"
                       >
                         #{tag}
                       </span>
@@ -468,7 +470,7 @@ const UserDashboard = () => {
                 )}
               </div>
 
-              <div className="flex items-center justify-between px-2 pt-2 border-t border-border">
+              <div className="flex items-center justify-between px-2 pt-2 border pb-2 border-border">
                 <button
                   onClick={() => handleLike(post._id)}
                   className={`flex items-center justify-center w-[33%] h-12 rounded-lg cursor-pointer transition-colors 
@@ -477,14 +479,14 @@ const UserDashboard = () => {
                       : "bg-accent"}`}
                 >
                   {isPostLikedByUser(post, user._id) 
-                    ? <Heart className="w-5 h-5" fill="white" /> 
-                    : <Heart className="w-5 h-5" />}
+                    ? <Heart className="w-5 h-5 icon" fill="white" /> 
+                    : <Heart className="w-5 h-5 icon" />}
                 </button>
                 <button 
                   onClick={() => setSharePost(post)}
                   className="flex items-center justify-center bg-accent hover:bg-primary hover:text-primary-foreground w-[33%] rounded-lg cursor-pointer h-12 transition-colors"
                 >
-                  <Share2 className="w-5 h-5" />
+                  <Share2 className="w-5 h-5 icon" />
                 </button>
                 <button 
                   onClick={() => window.open(post?.media[0]?.url || post?.url)}
@@ -507,7 +509,7 @@ const UserDashboard = () => {
 
       {/* Full Screen Image Modal */}
       {selectedImage && (
-        <div className="fixed inset-0 bg-black/90 z-50 flex rounded-none items-center justify-center" style={{
+        <div className="fixed inset-0 backdrop-blur-sm z-50 flex rounded-none items-center justify-center" style={{
           borderRadius: 0
         }} onClick={handleCloseImage}>
           <div className="relative w-full h-full flex items-center justify-center" onClick={e => e.stopPropagation()}>
@@ -519,7 +521,7 @@ const UserDashboard = () => {
             />
             <button
               onClick={handleCloseImage}
-              className="absolute top-4 right-4 text-white p-2 rounded-full hover:bg-white/10 transition-colors"
+              className="absolute top-4 right-4 p-2 rounded-full bg-background transition-colors"
             >
               <X className="w-6 h-6" />
             </button>

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { BACKEND_HOST } from '@/Utils/constant'
 import { Users2, LucideNewspaper, Settings2, Check, Trash } from 'lucide-react'
+import { Users } from 'lucide-react'
+import {useNavigate} from 'react-router-dom'
 
 const AdminDashboard = () => {
   const adminInfo = JSON.parse(window.localStorage.getItem("user"))
@@ -25,8 +27,10 @@ const AdminDashboard = () => {
     fetchData()
   }, [])
 
+  const navigate = useNavigate()
+
   return (
-    <div className='px-4 md:px-10 py-6 md:mt-20 md:ml-20 mb-20'>
+    <div className='px-4 md:px-10 py-6 mt-20 md:ml-20 mb-20'>
       <h1 className='text-2xl md:text-4xl font-semibold mb-2'>Howdy, {adminInfo.username}!</h1>
       <h2 className='text-base md:text-xl text-gray-600'>We hope you're doing well. What would you like to do today?</h2>
 
@@ -35,7 +39,7 @@ const AdminDashboard = () => {
         {/* Total Users */}
         <div className="relative rounded-xl backdrop-blur-md bg-gradient-to-br from-indigo-600 to-purple-600 text-white p-6 h-[250px] flex flex-col justify-between shadow-lg">
           <div className="absolute top-4  left-4 bg-white text-black p-6 rounded-full rounded-full">
-            <Users2 className='icon' />
+            <Users className='icon' />
           </div>
           <div className="text-right">
             <h1 className='text-5xl font-bold'>0{users?.length}</h1>
@@ -71,8 +75,8 @@ const AdminDashboard = () => {
         <div className="grid gap-4">
           {
             users.slice(0,5).map((user) => (
-              <div key={user._id} className="flex justify-between items-center border rounded-full px-4 py-2 bg-white shadow-sm">
-                <div className="flex items-center gap-3">
+              <div key={user._id} className="flex justify-between items-center border rounded-full px-4 py-2  shadow-sm">
+                <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate(`/user/${user._id}`)}>
                   <img src={user?.avatar} alt="avatar" className='w-12 h-12 rounded-full object-cover' />
                   <span className='text-sm lowercase'>
                     @{user?.username} {adminInfo._id === user._id ? "(You)" : ""}

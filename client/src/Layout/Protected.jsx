@@ -32,7 +32,7 @@ const Protected = ({ children }) => {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <div className="flex h-20 fixed top-0 border  z-10 w-[100%] justify-end items-center px-4" style={{
+      <div className="flex h-20 fixed top-0 border  z-10 w-[100%] justify-end bg-background/100 items-center px-4" style={{
         borderRadius: 0
       }}>
         <div className="flex" ref={infoRef}>
