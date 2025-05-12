@@ -52,7 +52,7 @@ const Protected = ({ children }) => {
             />
           )}
           {showInfo && (
-            <div className="absolute top-18 right-5 bg-inherit backdrop-blur-lg border rounded-lg p-4">
+            <div className="absolute top-18 right-5 bg-background border rounded-lg p-4">
               <div className="flex items-center space-x-3">
                 {user?.avatar ? (
                   <img

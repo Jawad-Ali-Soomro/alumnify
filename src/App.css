@@ -11,3 +11,7 @@
 .image {
   border-radius: 50%;
 }
+
+Button, button {
+  cursor: pointer;
+}

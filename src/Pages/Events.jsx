@@ -57,7 +57,7 @@ const Events = () => {
       <div className="md:ml-20 p-6 flex flex-col md:flex-row justify-end items-start md:items-center gap-4 mt-20">
         <div className="relative w-full md:w-64">
           <div className="flex items-center border rounded-lg px-3 py-2 w-full">
-            <Search className="h-4 w-4 mr-2 text-gray-500" />
+            <Search className="h-6 w-6 mr-2 text-gray-500 icon" />
             <input
               id="search-input"
               type="text"
@@ -65,8 +65,10 @@ const Events = () => {
               className="outline-none w-full"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                borderRadius: 0              }}
             />
-            <kbd className="hidden md:inline-flex items-center w-[65px] px-2 py-1 bg-gray-100 rounded text-xs ml-2">
+            <kbd className="hidden md:inline-flex items-center text-black w-[65px] px-2 py-1 bg-gray-100 rounded text-xs ml-2">
               ⌘ + K
             </kbd>
           </div>
