@@ -50,7 +50,7 @@ const LoginForm = () => {
   return (
     <div className="flex flex-col gap-4 h-[100vh] items-center justify-center">
       <form
-        className="w-[420px] shadow-lg border border-top rounded-lg px-5 py-10 relative gap-3 flex flex-col items-center align-center"
+        className="w-[420px] border-top rounded-lg px-5 py-10 relative gap-3 flex flex-col items-center align-center"
         onSubmit={handleSubmit(onSubmit)}
       >
         <img

@@ -73,13 +73,12 @@ const SharePopup = ({ isOpen, onClose, post }) => {
         className="bg-white rounded-lg p-6 w-[90%] max-w-md mx-auto"
         onClick={e => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold">Share Post</h3>
+        <div className="flex items-center justify-end mb-4">
           <button 
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700 transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 icon h-5" />
           </button>
         </div>
 
@@ -88,9 +87,11 @@ const SharePopup = ({ isOpen, onClose, post }) => {
             <button
               key={index}
               onClick={option.onClick}
-              className={`flex items-center icon justify-center gap-2 p-3 rounded-lg text-white ${option.color} transition-colors`}
+              className={`flex items-center justify-center gap-2 p-3 rounded-lg text-white ${option.color} transition-colors`}
             >
-              {option.icon}
+              <div className="flex icon">
+                {option.icon}
+              </div>
               <span>{option.name}</span>
             </button>
           ))}
@@ -478,11 +479,14 @@ const UserDashboard = () => {
               <div className="flex items-center justify-between px-2 pt-2 border pb-2 border-border">
                 <button
                   onClick={() => handleLike(post._id)}
-                  className={`flex items-center justify-center w-[33%] h-12 rounded-lg cursor-pointer transition-colors 
+                  className={`flex items-center justify-center relative w-[33%] h-12 rounded-lg cursor-pointer transition-colors 
                     ${isPostLikedByUser(post, user._id) 
                       ? "bg-destructive text-white" 
                       : "bg-accent"}`}
                 >
+                  <p className="absolute bg-red-500 px-4 py-1 top-[-10px] text-white right-[-10px]">{
+                        post?.likes.length
+                      }</p>
                   {isPostLikedByUser(post, user._id) 
                     ? <Heart className="w-5 h-5 icon" fill="white" /> 
                     : <Heart className="w-5 h-5 icon" />}

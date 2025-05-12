@@ -160,18 +160,18 @@ const UserProfile = () => {
             <div className="w-full h-px bg-border" />
             <CardContent className="py-4 space-y-4">
               <div className="flex items-center gap-4">
-                <Mail className="w-5 h-5 text-muted-foreground" />
+                <Mail className="w-5 h-5 text-muted-foreground icon" />
                 <span className="text-sm truncate">{user.email}</span>
               </div>
               {user.phone && (
                 <div className="flex items-center gap-4">
-                  <Phone className="w-5 h-5 text-muted-foreground" />
+                  <Phone className="w-5 h-5 text-muted-foreground icon" />
                   <span className="text-sm">{user.phone}</span>
                 </div>
               )}
               {user.university && (
                 <div className="flex items-center gap-4">
-                  <GraduationCap className="w-5 h-5 text-muted-foreground" />
+                  <GraduationCap className="w-5 h-5 text-muted-foreground icon" />
                   <span className="text-sm">
                     {user.university} {user.graduationYear && `(${user.graduationYear})`}
                   </span>
@@ -179,18 +179,18 @@ const UserProfile = () => {
               )}
               {user.field && (
                 <div className="flex items-center gap-4">
-                  <Briefcase className="w-5 h-5 text-muted-foreground" />
+                  <Briefcase className="w-5 h-5 text-muted-foreground icon" />
                   <span className="text-sm">{user.field}</span>
                 </div>
               )}
               {user.company && (
                 <div className="flex items-center gap-4">
-                  <Building className="w-5 h-5 text-muted-foreground" />
+                  <Building className="w-5 h-5 text-muted-foreground icon" />
                   <span className="text-sm truncate">{user.company}</span>
                 </div>
               )}
               <div className="flex items-center gap-4">
-                <Calendar className="w-5 h-5 text-muted-foreground" />
+                <Calendar className="w-5 h-5 text-muted-foreground icon" />
                 <span className="text-sm">
                   Joined {new Date(user.created_at).toLocaleDateString()}
                 </span>
@@ -233,7 +233,9 @@ const UserProfile = () => {
                             </Avatar>
                             <div>
                               <h4 className="font-semibold">@{user.username}</h4>
-                              <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                              <p className="text-sm text-muted-foreground mt-1 line-clamp-2"  style={{
+                                borderRadius:0
+                              }}>
                                 {user.bio || "No bio available"}
                               </p>
                               <div className="flex items-center mt-2 text-xs text-muted-foreground">
@@ -254,6 +256,9 @@ const UserProfile = () => {
                         className={`text-muted-foreground mb-3 text-justify ${
                           expandedPosts[post._id] ? "" : "line-clamp-2 "
                         }`}
+                        style={{
+                          borderRadius: 0
+                        }}
                       >
                         {post.content}
                       </p>
@@ -334,20 +339,23 @@ const UserProfile = () => {
                   <div className="flex items-center justify-between pt-3 border p-2">
                     <button
                       onClick={() => handleLike(post._id)}
-                      className={`flex items-center justify-center w-[50%] h-12  flex-1 py-2 rounded-lg transition-colors ${
+                      className={`flex items-center justify-center relative max-w-[140px] h-12  flex-1 py-2 rounded-lg transition-colors ${
                         isPostLikedByUser(post, currentUser._id) 
                         ? "bg-destructive text-white" 
                       : "bg-accent"
                       }`}
                     >
+                      <p className="absolute bg-red-500 px-4 py-1 top-[-10px] text-white right-[-10px]">{
+                        post?.likes.length
+                      }</p>
                        {isPostLikedByUser(post, currentUser._id) 
-                                         ? <Heart className="w-5 h-5 icon" fill="white" /> 
-                                         : <Heart className="w-5 h-5 icon" />}
+                          ? <Heart className="w-5 h-5 icon" fill="white" /> 
+                          : <Heart className="w-5 h-5 icon" />}
                      
                     </button>
                    <button 
                                      onClick={() => setSharePost(post)}
-                                     className="flex items-center justify-center bg-accent hover:bg-primary hover:text-primary-foreground w-[50%] rounded-lg cursor-pointer h-12 transition-colors"
+                                     className="flex items-center justify-center bg-accent hover:bg-primary hover:text-primary-foreground w-[80%] rounded-lg cursor-pointer h-12 transition-colors"
                                    >
                                      <Share2 className="w-5 h-5 icon" />
                                    </button>
@@ -404,7 +412,7 @@ const UserProfile = () => {
 
       {/* Full Screen Image Modal */}
       {selectedImage && (
-        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center" onClick={handleCloseImage}>
+        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center" style={{borderRadius: 0}} onClick={handleCloseImage}>
           <div className="relative w-full h-full flex items-center justify-center" onClick={e => e.stopPropagation()}>
             <img
               src={selectedImage}
