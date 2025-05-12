@@ -1,11 +1,12 @@
 import React from 'react'
 import UserDashboard from './Dashboards/User.Dashboard'
+import AdminDashboard from './Dashboards/Admin.Dashboard'
 
 const Dashboard = () => {
   const role = localStorage.getItem('role')
   switch (role) {
     case 'admin':
-      return <div>Admin Dashboard</div>
+      return <AdminDashboard />
     case 'user':
       return <UserDashboard />
   }
