@@ -8,6 +8,8 @@ import axios from 'axios';
 import { Mail, Phone, GraduationCap, Briefcase, Calendar, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom'
+import { FcOrganization } from "react-icons/fc";
+import { Building } from "lucide-react";
 
 const UserProfile = () => {
     const [user, setUser] = useState(null);
@@ -77,10 +79,15 @@ const UserProfile = () => {
                         </div>
                         <div className="flex items-center gap-4">
                             <div className="p-2 border">
-
                             <Briefcase className=" text-muted-foreground icon size={5}  " />
                             </div>
-                            <span className="text-foreground/50">{user.field} at {user.company}</span>
+                            <span className="text-foreground/50 max-w-[100%]">{user.field}</span>
+                        </div>
+                         <div className="flex items-center gap-4 truncate">
+                            <div className="p-2 border">
+                            <Building className=" text-muted-foreground icon size={5}  " />
+                            </div>
+                            <span className="text-foreground/50 max-w-[100%]">{user.company.slice(0,43)}</span>
                         </div>
                         <div className="flex items-center gap-4">
                             <div className="p-2 border">

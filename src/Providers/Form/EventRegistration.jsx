@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { format } from "date-fns";
 import { CalendarIcon, ImageIcon, X } from "lucide-react";
+import { useNavigate } from 'react-router-dom'
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,6 +19,7 @@ import { cn } from "@/lib/utils";
 import { uploadToPinata } from "@/Utils/uploadImage";
 import axios from "axios";
 import { BACKEND_HOST } from "@/Utils/constant";
+import { toast } from "sonner";
 
 export function CreateEventForm() {
   const [preview, setPreview] = useState(null);
@@ -36,6 +38,8 @@ export function CreateEventForm() {
     url: "",
     image: null,
   });
+
+  const navigate = useNavigate
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
@@ -70,7 +74,10 @@ export function CreateEventForm() {
       const finalData = { ...formData, image: imageUrl };
 
       const apiReq = await axios.post(`${BACKEND_HOST}/api/event`, finalData)
-      console.log(apiReq.data)
+      if(apiReq.data.success) {
+        toast.success("Event Registered!")
+        window.location.href = '/admin/events'
+      }
       console.log("Final submitted data:", finalData);
     } catch (error) {
       console.error("Error uploading or submitting event:", error);

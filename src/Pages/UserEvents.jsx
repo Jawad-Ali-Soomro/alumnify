@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { MapPin } from "lucide-react";
 import { Calendar } from "lucide-react";
-import { Plus } from "lucide-react";
 import { CalendarCheck } from "lucide-react";
 import { RiCalendarCheckLine, RiCalendarCloseLine } from "react-icons/ri";
 
@@ -49,7 +48,7 @@ const UserEvents = () => {
           </div>
 
           {/* Location */}
-          <div className="text-sm flex gap-2 items-center w-[120px] truncate h-10 justify-start">
+          <div className="text-sm flex gap-2 items-center  truncate h-10 justify-start">
             <div className="w-[40px] h-[40px] border flex items-center justify-center">
                 <MapPin size={18} /></div>{event.location}
           </div>
@@ -79,9 +78,11 @@ const UserEvents = () => {
               <span className=" bg-red-500 flex font-semibold w-[150px] h-11 py-3 justify-center items-center  text-white">PAID - ${event.price}</span>
             )}
           </div>
-          <div className="text-sm justify-end flex">
+          {
+            event.url && <div className="text-sm justify-end flex">
             <button className="w-[150px] h-11 bg-[#333] text-white font-semibold cursor-pointer" onClick={() => window.location.replace(event.url)}>VISIT SITE</button>
           </div>
+          }
          </div>
         </div>
       ))}

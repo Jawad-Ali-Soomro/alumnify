@@ -109,7 +109,7 @@ const AddPost = () => {
 
   return (
     <div className="w-full py-8">
-      <div className="max-w-[800px] mt-15 mx-auto px-4">
+      <div className="max-w-[800px] mt-15 mx-auto">
         <div className="rounded-lg p-6">
           <form onSubmit={handleSubmit} className="space-y-2">
             <div>
@@ -192,7 +192,7 @@ const AddPost = () => {
               <div className="border border-dashed border-gray-300 rounded-lg p-4 mb-4 bg-accent/30 relative">
                 <div className="flex flex-col items-center justify-center gap-2">
                   <ImageIcon className="w-5 h-5 text-gray-500" />
-                  <p>Upload Images or drag images here to upload!</p>
+                  <p className="text-sm">Upload Images or drag images here to upload!</p>
                   <input
                     type="file"
                     accept="image/*"

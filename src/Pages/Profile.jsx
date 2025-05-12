@@ -85,8 +85,8 @@ const Profile = () => {
   );
 
   return (
-    <div className="flex items-center justify-center w-[80%] ml-[10%] mt-20 flex-col min-h-[80vh]">
-      <div className="left-side flex flex-col p-4 justify-between items-center border rounded-[20px] shadow-lg gap-2 w-[600px]">
+    <div className="flex items-center justify-center md:w-[80%] w-[96%] md:ml-[10%] ml-[2%] mt-20 flex-col min-h-[80vh]">
+      <div className="left-side flex flex-col p-4 justify-between items-center rounded-[20px] gap-2 w-[100%]">
         <div className="image flex flex-col items-center gap-2 relative">
           <img src={tempInfo.avatar || userInfo.avatar} className="w-[200px] image h-[200px] border rounded-full object-cover" alt="Avatar" />
           {isEditing && (

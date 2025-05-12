@@ -27,7 +27,7 @@ const Events = () => {
   }, []);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 md:ml-20 mt-20 lg:grid-cols-3 gap-6 p-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 md:ml-20 mt-20 lg:grid-cols-3 gap-6 p-6 mb-20">
       {events.map((event) => (
         <div
           key={event._id}
@@ -51,7 +51,7 @@ const Events = () => {
           </div>
 
           {/* Location */}
-          <div className="text-sm flex gap-2 items-center w-[120px] truncate h-10 justify-start">
+          <div className="text-sm flex gap-2 items-center truncate h-10 justify-start">
             <div className="w-[40px] h-[40px] border flex items-center justify-center">
                 <MapPin size={18} /></div>{event.location}
           </div>
@@ -81,14 +81,16 @@ const Events = () => {
               <span className=" bg-red-500 flex font-semibold w-[150px] h-11 py-3 justify-center items-center  text-white">PAID - ${event.price}</span>
             )}
           </div>
-          <div className="text-sm justify-end flex">
+          {
+            event.url && <div className="text-sm justify-end flex">
             <button className="w-[150px] h-11 bg-[#333] text-white font-semibold cursor-pointer" onClick={() => window.location.replace(event.url)}>VISIT SITE</button>
           </div>
+          }
          </div>
         </div>
       ))}
 
-      <button onClick={() => navigate('/admin/create/event')} className="w-[50px] h-[50px] bg-[#333] text-white flex justify-center items-center absolute bottom-5 right-5 cursor-pointer"><Plus /></button>
+      <button onClick={() => navigate('/admin/create/event')} className="w-[50px] h-[50px] bg-[#333] text-white flex justify-center items-center fixed bottom-5 right-5 cursor-pointer"><Plus /></button>
     </div>
   );
 };
