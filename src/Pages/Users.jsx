@@ -1,13 +1,11 @@
 import { Input } from '@/components/ui/input'
 import { BACKEND_HOST } from '@/Utils/constant'
 import axios from 'axios'
-import { Trash } from 'lucide-react'
-import { Search } from 'lucide-react'
-import { Info } from 'lucide-react'
-import { Check } from 'lucide-react'
+import { Trash, Search, Info, Check, X } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { RiWindowsLine } from 'react-icons/ri'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 
 const Users = () => {
     const [users, setUsers] = useState([])
@@ -16,9 +14,14 @@ const Users = () => {
     const [isSearchFocused, setIsSearchFocused] = useState(false)
 
     const fetchUsers = async () => {
-        const api = await axios.get(`${BACKEND_HOST}/api/user/all`)
-        setUsers(api.data.users)
-        setFilteredUsers(api.data.users)
+        try {
+            const { data } = await axios.get(`${BACKEND_HOST}/api/user/all`)
+            setUsers(data.users)
+            setFilteredUsers(data.users)
+        } catch (error) {
+            toast.error('Failed to fetch users')
+            console.error(error)
+        }
     }
 
     useEffect(() => {
@@ -44,6 +47,42 @@ const Users = () => {
         window.addEventListener('keydown', handleKeyDown)
         return () => window.removeEventListener('keydown', handleKeyDown)
     }, [])
+
+    const toggleVerifyUser = async (userId) => {
+        try {
+            // Optimistically update the UI
+            setUsers(prevUsers => 
+                prevUsers.map(user => 
+                    user._id === userId ? { ...user, isVerified: !user.isVerified } : user
+                )
+            )
+            
+            const { data } = await axios.post(`${BACKEND_HOST}/api/user/toggle/verify/${userId}`)
+            toast.success(`User ${data.user.isVerified ? 'verified' : 'unverified'} successfully`)
+        } catch (error) {
+            // Revert on error
+            setUsers(prevUsers => 
+                prevUsers.map(user => 
+                    user._id === userId ? { ...user, isVerified: !user.isVerified } : user
+                )
+            )
+            toast.error('Failed to update verification status')
+            console.error(error)
+        }
+    }
+
+    const deleteUser = async (userId) => {
+        try {
+            setUsers(prevUsers => prevUsers.filter(user => user._id !== userId))
+            await axios.delete(`${BACKEND_HOST}/api/user/${userId}`)
+            toast.success('User deleted successfully')
+        } catch (error) {
+            fetchUsers() // Just refetch to ensure consistency
+            toast.error('Failed to delete user')
+            console.error(error)
+        }
+    }
+        
     const navigate = useNavigate()
     return (
         <div className='md:ml-30 mt-30 md:mr-10'>
@@ -73,35 +112,53 @@ const Users = () => {
             </div>
 
             <div className="flex flex-col gap-2">
-                {
+                {filteredUsers.length === 0 ? ( 
+                    <div className="text-center py-10">No users found</div>
+                ) : (
                     filteredUsers.map((user) => (
                         <div key={user._id} className="flex justify-between items-center border rounded-full px-4 py-2 shadow-sm">
-                            <div className="flex items-center gap-3 cursor-pointer" onClick={()  => navigate(`/user/${user._id}`)}>
-                                <img src={user?.avatar} alt="avatar" className='w-12 h-12 rounded-full object-cover' />
+                            <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate(`/user/${user._id}`)}>
+                                <img 
+                                    src={user?.avatar} 
+                                    alt="avatar" 
+                                    className='w-12 h-12 rounded-full object-cover' 
+                                    onError={(e) => {
+                                        e.target.onerror = null
+                                        e.target.src = 'https://via.placeholder.com/150'
+                                    }}
+                                />
                                 <div>
                                     <span className='text-sm lowercase'>
                                         @{user?.username} 
                                     </span>
-                                    {user.verified && (
+                                    {user.isVerified ? (
                                         <span className="ml-2 text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Verified</span>
+                                    ) : (
+                                        <span className="ml-2 text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Unverified</span>
                                     )}
                                 </div>
                             </div>
                             <div className="flex gap-2">
-                                
-                                <button className='w-10 h-10 bg-green-100 text-green-700 rounded-full flex justify-center items-center hover:bg-green-200'>
-                                    <Check size={18} />
+                                <button 
+                                    onClick={() => toggleVerifyUser(user._id)}
+                                    className={`w-10 h-10 rounded-full flex justify-center items-center hover:bg-opacity-80 ${
+                                        user.isVerified 
+                                            ? 'bg-green-100 text-green-700 hover:bg-green-200' 
+                                            : 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200'
+                                    }`}
+                                >
+                                    {user.isVerified ? <Check size={18} /> : <X size={18} />}
                                 </button>
-                                <button className='w-10 h-10 bg-red-100 text-red-700 rounded-full flex justify-center items-center hover:bg-red-200'>
+                                <button 
+                                    onClick={() => deleteUser(user._id)}
+                                    className='w-10 h-10 bg-red-100 text-red-700 rounded-full flex justify-center items-center hover:bg-red-200'
+                                >
                                     <Trash size={18} />
-                                </button>
-                                <button className='w-10 h-10 bg-blue-100 text-black rounded-full flex justify-center items-center hover:bg-blue-200'>
-                                    <Info size={18} />
                                 </button>
                             </div>
                         </div>
                     ))
-                }
+                )}
             </div>
         </div>
     )

@@ -107,11 +107,11 @@ const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
   return (
     <div className="fixed inset-0 backdrop-blur-sm z-50 flex items-center justify-center" onClick={onClose}>
       <div 
-        className="bg-background border rounded-lg p-6 w-[300px] max-w-md items-center justify-center mx-auto"
+        className="bg-background border rounded-lg p-6 max-w-md items-center justify-center mx-auto w-[350px]"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-center justify-between flex-col mb-4">
-          <h3 className="text-lg text-destructive font-semibold">Delete</h3>
+          <h3 className="text-lg text-destructive font-semibold text-center">Delete</h3>
           {/* <button 
             onClick={onClose}
             className="text-muted-foreground hover:text-foreground transition-colors"
@@ -119,11 +119,11 @@ const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
             <X className="w-5 h-5" />
           </button> */}
         </div>
-        <p className="text-muted-foreground mb-4">You surely want to delete this post.</p>
-        <div className="flex justify-end gap-2">
+        <p className="text-muted-foreground mb-4 text-center">You surely want to delete this post.</p>
+        <div className="flex justify-end gap-2 mt-5">
           <button
             onClick={onClose}
-            className="w-[50%] h-10 cursor-pointer rounded-lg bg-accent hover:bg-accent/80 text-accent-foreground"
+            className="w-[50%] h-10  cursor-pointer rounded-lg bg-accent hover:bg-accent/80 text-accent-foreground"
           >
             Cancel
           </button>
@@ -287,7 +287,7 @@ const UserDashboard = () => {
               key={post?._id}
             >
               <div className="flex items-center justify-between w-full px-2 py-2 mb-3">
-                <div className="flex items-center space-x-3 cursor-pointer" onClick={() => {post?.author?._id === user._id ?  navigate(`/profile`) :  navigate(`/user/${post?.author?._id}`)}}>
+                <div className="flex items-center space-x-3 cursor-pointer" onClick={() =>  navigate(`/user/${post?.author?._id}`)}>
                   <img
                     className="w-10 h-10 rounded-lg border bg-white"
                     src={post?.author?.avatar || "/avatar.avif"}

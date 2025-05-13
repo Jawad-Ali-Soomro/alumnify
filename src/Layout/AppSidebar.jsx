@@ -39,10 +39,6 @@ const AppSidebar = () => {
       { path: "/admin/users", icon: Users },
       { path: "/admin/events", icon: CalendarCheck },
       { path: "/admin/jobs", icon: List },
-      {
-        path: "/admin/verify-alumni",
-        icon: GiConfirmed,
-      },
       { path: "/admin/reports", icon: Bug },
     ],
   };
@@ -62,7 +58,7 @@ const AppSidebar = () => {
       {/* Mobile Toggle Button */}
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className={`md:hidden fixed top-4 z-30 p-2 rounded-lg bg-background border cursor-pointer transition-all duration-300 ease-in-out
+        className={`md:hidden fixed top-4 z-30 p-2 rounded-lg bg-background cursor-pointer transition-all duration-300 ease-in-out
           ${isOpen ? 'left-[90px]' : 'left-4'}`}
       >
         <Menu className="w-6 h-6" />

@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from "react";
 import AppSidebar from "./AppSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import {useNavigate} from 'react-router-dom'
+import { Verified } from "lucide-react";
+import { X } from "lucide-react";
 
 const Protected = ({ children }) => {
   const token = window.localStorage.getItem("token");
@@ -51,6 +53,13 @@ const Protected = ({ children }) => {
               onClick={() => setShowInfo(!showInfo)}
             />
           )}
+          <div className="flex relative">
+           {
+            user?.isVerified ? <div className="flex absolute bottom-[-10px] p-1 bg-white right-[-10px]">
+              <Verified />
+            </div> : <></>
+           }
+          </div>
           {showInfo && (
             <div className="absolute top-18 right-5 bg-background border rounded-lg p-4">
               <div className="flex items-center space-x-3">

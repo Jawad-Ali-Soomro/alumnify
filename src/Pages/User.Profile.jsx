@@ -29,6 +29,7 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/h
 import { Building } from "lucide-react";
 import { Facebook } from "lucide-react";
 import { Twitter } from "lucide-react";
+import { Instagram } from "lucide-react";
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
@@ -140,10 +141,10 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="mt-22 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div className="mt-25 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Profile Card - Sticky on desktop */}
-        <div className="lg:sticky lg:top-22 lg:h-fit lg:w-[400px]">
+        <div className="lg:sticky lg:top-25 lg:h-fit lg:w-[400px]">
           <Card className="w-full shadow-sm">
             <CardHeader className="flex flex-col items-center gap-4">
               <Avatar className="w-24 h-24">
@@ -161,18 +162,18 @@ const UserProfile = () => {
             <CardContent className="py-4 space-y-4">
               <div className="flex items-center gap-4">
                 <Mail className="w-5 h-5 text-muted-foreground icon" />
-                <span className="text-sm truncate">{user.email}</span>
+                <span className="text-sm truncate" style={{borderRadius: 0}} style={{borderRadius: 0}}>{user.email}</span>
               </div>
               {user.phone && (
                 <div className="flex items-center gap-4">
                   <Phone className="w-5 h-5 text-muted-foreground icon" />
-                  <span className="text-sm">{user.phone}</span>
+                  <span className="text-sm" style={{borderRadius: 0}}>{user.phone}</span>
                 </div>
               )}
               {user.university && (
                 <div className="flex items-center gap-4">
                   <GraduationCap className="w-5 h-5 text-muted-foreground icon" />
-                  <span className="text-sm">
+                  <span className="text-sm" style={{borderRadius: 0}}>
                     {user.university} {user.graduationYear && `(${user.graduationYear})`}
                   </span>
                 </div>
@@ -180,18 +181,18 @@ const UserProfile = () => {
               {user.field && (
                 <div className="flex items-center gap-4">
                   <Briefcase className="w-5 h-5 text-muted-foreground icon" />
-                  <span className="text-sm">{user.field}</span>
+                  <span className="text-sm" style={{borderRadius: 0}}>{user.field}</span>
                 </div>
               )}
               {user.company && (
                 <div className="flex items-center gap-4">
                   <Building className="w-5 h-5 text-muted-foreground icon" />
-                  <span className="text-sm truncate">{user.company}</span>
+                  <span className="text-sm truncate" style={{borderRadius: 0}}>{user.company}</span>
                 </div>
               )}
               <div className="flex items-center gap-4">
                 <Calendar className="w-5 h-5 text-muted-foreground icon" />
-                <span className="text-sm">
+                <span className="text-sm" style={{borderRadius: 0}}>
                   Joined {new Date(user.created_at).toLocaleDateString()}
                 </span>
               </div>
@@ -215,7 +216,7 @@ const UserProfile = () => {
                   <div className="flex items-center justify-between mb-3">
                     <div 
                       className="flex items-center gap-3 cursor-pointer"
-                      onClick={() => navigate(`/user/${post.author._id}`)}
+                      onClick={() => navigate(`/user/${post.author}`)}
                     >
                       <img
                         className="w-10 h-10 rounded-lg border"
@@ -339,7 +340,7 @@ const UserProfile = () => {
                   <div className="flex items-center justify-between pt-3 border p-2">
                     <button
                       onClick={() => handleLike(post._id)}
-                      className={`flex items-center justify-center relative max-w-[140px] h-12  flex-1 py-2 rounded-lg transition-colors ${
+                      className={`flex items-center justify-center relative max-w-[33%] h-12  flex-1 py-2 rounded-lg transition-colors ${
                         isPostLikedByUser(post, currentUser._id) 
                         ? "bg-destructive text-white" 
                       : "bg-accent"
@@ -355,14 +356,14 @@ const UserProfile = () => {
                     </button>
                    <button 
                                      onClick={() => setSharePost(post)}
-                                     className="flex items-center justify-center bg-accent hover:bg-primary hover:text-primary-foreground w-[80%] rounded-lg cursor-pointer h-12 transition-colors"
+                                     className="flex items-center justify-center bg-accent hover:bg-primary hover:text-primary-foreground w-[33%] rounded-lg cursor-pointer h-12 transition-colors"
                                    >
                                      <Share2 className="w-5 h-5 icon" />
                                    </button>
                     {post.url && (
                       <button 
                         onClick={() => window.open(post.url)}
-                        className="flex items-center justify-center flex-1 py-2 rounded-lg text-muted-foreground hover:text-primary"
+                        className="flex items-center justify-center bg-accent hover:bg-primary hover:text-primary-foreground w-[33%] rounded-lg cursor-pointer h-12 transition-colors"
                       >
                         <Link className="w-5 h-5" />
                       </button>
@@ -377,7 +378,9 @@ const UserProfile = () => {
 
       {/* Share Popup */}
       {sharePost && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center" onClick={() => setSharePost(null)}>
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center" onClick={() => setSharePost(null)} style={{
+          borderRadius: 0
+        }}>
           <div 
             className="bg-background rounded-lg p-6 w-[90%] max-w-md mx-auto"
             onClick={e => e.stopPropagation()}
@@ -390,12 +393,19 @@ const UserProfile = () => {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               <button
                 onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + `/post/${sharePost._id}`)}`, '_blank')}
                 className="flex items-center justify-center gap-2 p-3 rounded-lg bg-blue-600 text-white"
               >
                 <Facebook />
+                <span>Facebook</span>
+              </button>
+               <button
+                onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + `/post/${sharePost._id}`)}`, '_blank')}
+                className="flex items-center justify-center gap-2 p-3 rounded-lg bg-blue-600 text-white"
+              >
+                <Instagram className="icon" />
                 <span>Facebook</span>
               </button>
               <button

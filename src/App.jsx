@@ -10,6 +10,9 @@ import UserProfile from "./Pages/User.Profile";
 import { CreateEventForm } from "./Providers/Form/EventRegistration";
 import Events from "./Pages/Events";
 import UserEvents from "./Pages/UserEvents";
+import Jobs from "./Pages/Jobs";
+import AddJob from "./Layout/Add.Job";
+import UserJobs from "./Pages/User.Jobs";
 function App() {
   const token = window.localStorage.getItem("token");
 
@@ -94,11 +97,41 @@ function App() {
         <Login />
       ),
     },
-     {
+    {
       path: "/events",
       element: token ? (
         <Protected>
           <UserEvents />
+        </Protected>
+      ) : (
+        <Login />
+      ),
+    },
+    {
+      path: "/admin/jobs",
+      element: token ? (
+        <Protected>
+          <Jobs />
+        </Protected>
+      ) : (
+        <Login />
+      ),
+    },
+    {
+      path: "/admin/create/job",
+      element: token ? (
+        <Protected>
+          <AddJob />
+        </Protected>
+      ) : (
+        <Login />
+      ),
+    },
+     {
+      path: "/jobs",
+      element: token ? (
+        <Protected>
+          <UserJobs />
         </Protected>
       ) : (
         <Login />
