@@ -13,6 +13,7 @@ import UserEvents from "./Pages/UserEvents";
 import Jobs from "./Pages/Jobs";
 import AddJob from "./Layout/Add.Job";
 import UserJobs from "./Pages/User.Jobs";
+import Network from "./Pages/Network";
 function App() {
   const token = window.localStorage.getItem("token");
 
@@ -132,6 +133,16 @@ function App() {
       element: token ? (
         <Protected>
           <UserJobs />
+        </Protected>
+      ) : (
+        <Login />
+      ),
+    },
+    {
+      path: "/network",
+      element: token ? (
+        <Protected>
+          <Network />
         </Protected>
       ) : (
         <Login />

@@ -94,7 +94,7 @@ const UserEvents = () => {
               {/* Title & Description */}
               <div>
                 <h2 className="text-xl font-semibold">{event.title}</h2>
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className="text-sm text-muted-foreground mt-1 truncate">
                   {event.description}
                 </p>
               </div>

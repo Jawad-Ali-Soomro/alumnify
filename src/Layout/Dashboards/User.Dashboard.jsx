@@ -6,6 +6,9 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { HoverCard } from "@radix-ui/react-hover-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useNavigate } from 'react-router-dom'
+import { BACKEND_HOST } from "@/Utils/constant";
+import { toast } from "sonner";
+import { UserMinus } from "lucide-react";
 
 const PostSkeleton = () => (
   <div className="flex flex-col rounded-lg border border-gray-300 p-4 mb-4 w-[95%] md:w-full max-w-[800px] mx-auto">
@@ -68,7 +71,9 @@ const SharePopup = ({ isOpen, onClose, post }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center" onClick={onClose} style={{
+      borderRadius: 0
+    }}>
       <div 
         className="bg-white rounded-lg p-6 w-[90%] max-w-md mx-auto"
         onClick={e => e.stopPropagation()}
@@ -207,13 +212,9 @@ const UserDashboard = () => {
     console.log("Mute user:", userId);
   };
 
-  const handleSavePost = async (postId) => {
-    console.log("Save post:", postId);
-  };
+ 
 
-  const handleReportPost = async (postId) => {
-    console.log("Report post:", postId);
-  };
+;
 
   const handleDeleteClick = (postId) => {
     setDeletePostId(postId);
@@ -262,8 +263,64 @@ const UserDashboard = () => {
   useEffect(() => {
     fetchPosts();
   }, []);
-
+  
   const navigate = useNavigate()
+
+ const addFriend = async (friendId) => {
+    const api = await axios.post(`${BACKEND_HOST}/api/user/add-friend`, {
+      userId: user._id,
+      friendId
+    })
+    setPosts(prevPosts => 
+        prevPosts.map(post => {
+          if (post.author._id === friendId) {
+            const isFollowing = post.author.followers.includes(user._id);
+            const updatedFollowers = isFollowing
+              ? post.author.followers.filter(id => id !== user._id)
+              : [...post.author.followers, user._id];
+            
+            return {
+              ...post,
+              author: {
+                ...post.author,
+                followers: updatedFollowers
+              }
+            };
+          }
+          return post;
+        })
+      );
+    toast.success(api.data.message)
+    // fetchPosts()
+  }
+
+  const removeFriend = async (friendId) => {
+    const api = await axios.post(`${BACKEND_HOST}/api/user/remove-friend`, {
+      userId: user._id,
+      friendId
+    })
+    toast.success(api.data.message)
+     setPosts(prevPosts => 
+        prevPosts.map(post => {
+          if (post.author._id === friendId) {
+            const isFollowing = post.author.followers.includes(user._id);
+            const updatedFollowers = isFollowing
+              ? post.author.followers.filter(id => id !== user._id)
+              : [...post.author.followers, user._id];
+            
+            return {
+              ...post,
+              author: {
+                ...post.author,
+                followers: updatedFollowers
+              }
+            };
+          }
+          return post;
+        })
+      );
+    // fetchPosts()
+  }
 
   return (
     <div className="flex justify-center w-full overflow-y-auto">
@@ -333,6 +390,9 @@ const UserDashboard = () => {
                       className={`absolute top-3 right-0 mt-8 bg-background overflow-hidden border w-[200px] rounded-lg shadow-lg z-50 ${
                         openMenuId === post._id ? 'block' : 'hidden'
                       }`}
+                      style={{
+                        borderRadius:'17px'
+                      }}
                     >
                       {post.author?._id === user._id ? (
                         <>
@@ -354,32 +414,18 @@ const UserDashboard = () => {
                       ) : (
                         <>
                           <button
+                          onClick={() => post.author.followers.includes(user._id) ? removeFriend(post?.author?._id) : addFriend(post.author._id)}
                             className="flex items-center gap-2 w-full px-4 py-2 text-left hover:bg-accent text-accent-foreground"
                           >
-                            <UserPlus className="w-4 h-4" />
-                            Add Friend
+                           {
+                            post.author.followers.includes(user._id) ? <>
+                             <UserMinus className="w-4 h-4 icon" />
+                            Remove Friend</> : <>
+                             <UserPlus className="w-4 h-4 icon" />
+                            Add Friend</>
+                           }
                           </button>
-                          <button
-                            onClick={() => handleMuteUser(post.userId)}
-                            className="flex items-center gap-2 w-full px-4 py-2 text-left hover:bg-accent text-accent-foreground"
-                          >
-                            <VolumeX className="w-4 h-4" />
-                            Mute User
-                          </button>
-                          <button
-                            onClick={() => handleSavePost(post._id)}
-                            className="flex items-center gap-2 w-full px-4 py-2 text-left hover:bg-accent text-accent-foreground"
-                          >
-                            <Bookmark className="w-4 h-4" />
-                            Save Post
-                          </button>
-                          <button
-                            onClick={() => handleReportPost(post._id)}
-                            className="flex items-center gap-2 w-full px-4 py-2 text-left hover:bg-accent text-destructive-foreground"
-                          >
-                            <Flag className="w-4 h-4" />
-                            Report Post
-                          </button>
+                          
                         </>
                       )}
                     </div>

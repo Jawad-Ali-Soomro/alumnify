@@ -116,8 +116,8 @@ const AdminDashboard = () => {
       {/* Users Preview */}
       <div className="mt-10">
         <div className="grid gap-4">
-          {users.slice(0,5).map((user) => (
-            <div key={user._id} className="flex justify-between items-center border rounded-full px-4 py-2 shadow-sm">
+          {users.slice(-4).map((user) => (
+            <div key={user._id} className="flex justify-between row-reverse items-center border rounded-full px-4 py-2 shadow-sm">
               <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate(`/user/${user._id}`)}>
                 <img 
                   src={user?.avatar} 
