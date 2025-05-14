@@ -138,17 +138,17 @@ const Profile = () => {
 
         <div className="info flex flex-col gap-2 mt-2 w-[90%]">
           {/* Non-editable username and email */}
-          {renderEditableField("username", <User size={20} />, "Username", true)}
-          {renderEditableField("email", <Mail size={20} />, "Email", true)}
+          {renderEditableField("username", <User size={20}className="icon" />, "Username", true)}
+          {renderEditableField("email", <Mail size={20}className="icon" />, "Email", true)}
 
           {/* Editable fields */}
-          {renderEditableField("phone", <Phone size={20} />, "Phone Number")}
-          {renderEditableField("bio", <Info size={20} />, "Short Bio")}
+          {renderEditableField("phone", <Phone size={20}className="icon" />, "Phone Number")}
+          {renderEditableField("bio", <Info size={20}className="icon" />, "Short Bio")}
           <div className="flex w-[90%] ml-[5%] h-[1px] bg-gray-200 my-2"></div>
-          {renderEditableField("field", <Briefcase size={20} />, "Profession")}
-          {renderEditableField("company", <MapPin size={20} />, "Company")}
-          {renderEditableField("university", <GraduationCap size={20} />, "University")}
-          {renderEditableField("graduationYear", <GraduationCap size={20} />, "Graduation Year")}
+          {renderEditableField("field", <Briefcase size={20}className="icon" />, "Profession")}
+          {renderEditableField("company", <MapPin size={20}className="icon" />, "Company")}
+          {renderEditableField("university", <GraduationCap size={20}className="icon" />, "University")}
+          {renderEditableField("graduationYear", <GraduationCap size={20}className="icon" />, "Graduation Year")}
 
           {/* Buttons */}
           {isEditing ? (

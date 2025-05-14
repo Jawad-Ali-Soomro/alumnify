@@ -38,7 +38,7 @@ const Protected = ({ children }) => {
   const renderPinPrompt = () => (
     <div className="flex flex-col items-center justify-center min-h-screen w-full gap-6">
       <div className="bg-white shadow-md rounded-xl p-8 w-full max-w-sm">
-        <h2 className="text-l font-semibold text-center mb-4 uppercase ">Enter Admin PIN</h2>
+        <h2 className="text-l font-semibold text-black text-center mb-4 uppercase ">Enter Admin PIN</h2>
         <InputOTP
           maxLength={6}
           value={pin}
@@ -49,7 +49,7 @@ const Protected = ({ children }) => {
               <InputOTPSlot
                 key={i}
                 index={i}
-                className="rounded-lg border-gray-300 focus:ring-2 ring-blue-500 w-[40px] h-[40px]"
+                className="rounded-lg border-gray-300 focus:ring-2 text-black ring-blue-500 w-[40px] h-[40px]"
                 style={{
                   borderRadius: '10px'
                 }}
@@ -62,7 +62,7 @@ const Protected = ({ children }) => {
               <InputOTPSlot
                 key={i}
                 index={i}
-                 className="rounded-lg border-gray-300 focus:ring-2 ring-blue-500 w-[40px] h-[40px]"
+                 className="rounded-lg border-gray-300 focus:ring-2 ring-blue-500 text-black w-[40px] h-[40px]"
                 style={{
                   borderRadius: '10px'
                 }}
@@ -112,7 +112,7 @@ const Protected = ({ children }) => {
 
           {/* Info Dropdown */}
           {showInfo && (
-            <div className="absolute top-14 right-0 w-64 bg-white border rounded-lg shadow-md p-4 z-50">
+            <div className="absolute top-14 right-0 w-64 bg-background border rounded-lg shadow-md p-4 z-50">
               <div className="flex items-center gap-3 mb-4">
                 <img
                   src={user?.avatar || "/avatar.avif"}
@@ -120,7 +120,7 @@ const Protected = ({ children }) => {
                   alt="avatar"
                 />
                 <div>
-                  <h2 className="text-sm font-semibold">{user?.username}</h2>
+                  <h2 className="text-sm font-semibold ">{user?.username}</h2>
                   <p className="text-xs text-gray-500">{user?.email}</p>
                 </div>
               </div>
